@@ -20,6 +20,14 @@ class Solargraph::TestDragonruby < Minitest::Test
     api.clip_at("main.rb", [1, expr.length + 2]).complete.pins.map(&:name)
   end
 
+  # Like #complete, but inside a hook defined in `module Main`.
+  def complete_in_main(expr, signature: "def tick")
+    source = Solargraph::Source.load_string("module Main\n  #{signature}\n    #{expr}\n  end\nend\n", "main.rb")
+    api = self.class.api_map
+    api.map(source)
+    api.clip_at("main.rb", [2, expr.length + 4]).complete.pins.map(&:name)
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::Solargraph::Dragonruby::VERSION
   end
@@ -146,6 +154,41 @@ class Solargraph::TestDragonruby < Minitest::Test
     assert_includes complete("args.inputs.mouse.buttons.left.buffered_click.created_"), "created_at"
     assert_includes complete("args.inputs.mouse.buffered_held.glob"), "global_created_at"
     assert_includes complete("args.inputs.mouse.buttons.right.buffered_click.inside_"), "inside_rect?"
+  end
+
+  # module Main
+
+  def test_main_helpers
+    {"outp" => "outputs", "inpu" => "inputs", "stat" => "state", "even" => "events", "aud" => "audio"}.each do |expr, name|
+      assert_includes complete_in_main(expr), name
+    end
+  end
+
+  def test_main_helper_chains
+    assert_includes complete_in_main("inputs.keyboard.key_d"), "key_down"
+    assert_includes complete_in_main("outputs.spr"), "sprites"
+    assert_includes complete_in_main("args.outp"), "outputs"
+  end
+
+  def test_main_tick_args_is_inferred_as_gtk_args
+    source = Solargraph::Source.load_string("module Main\n  def tick args\n    args.outputs\n  end\nend\n", "main.rb")
+    api = self.class.api_map
+    api.map(source)
+    assert_equal "GTK::Outputs", api.clip_at("main.rb", [2, 10]).define.first.return_type.to_s
+  end
+
+  def test_main_hooks
+    assert_includes complete_in_main("stat", signature: "def start"), "state"
+    assert_includes complete_in_main("args.outp", signature: "def boot args"), "outputs"
+  end
+
+  def test_main_state_is_a_hash
+    assert_includes complete_in_main("state.fetc"), "fetch"
+    refute_includes complete_in_main("state.new_ent"), "new_entity"
+  end
+
+  def test_main_helpers_stay_in_main
+    refute_includes complete("outp"), "outputs"
   end
 
   # Indie and Pro

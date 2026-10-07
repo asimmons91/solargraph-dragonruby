@@ -13,6 +13,20 @@ def tick args                         # args is typed as GTK::Args automatically
 end
 ```
 
+The `module Main` entry point works too:
+
+```ruby
+module Main
+  def start                           # boot, start, tick, reset, ... with or without args
+    state.score = 0                   # state is a Hash in Main
+  end
+
+  def tick
+    outputs.labels << { ... }         # args, inputs, outputs, state, events and audio complete bare
+  end
+end
+```
+
 The API definitions are YARD stubs. Most of them come from
 [owenbutler/dragonruby-yard-doc](https://github.com/owenbutler/dragonruby-yard-doc),
 with extra coverage added here (see [What's covered](#whats-covered)).
@@ -55,6 +69,8 @@ indexed twice.
   outputs, inputs (keyboard, mouse, controllers), `Geometry`, `Easing`, `Layout`, `Numeric`
   extensions, `Kernel.tick_count`, and the `tick`/`boot`/`reset` hooks.
 - **Added here** (`stubs/extensions`), checked against the DragonRuby 7.22 docs, sample apps and open-source runtime:
+  - `module Main`: the `boot`/`start`/`tick`/`reset`/`did_reset`/`shutdown` hooks (with or without `args`) and bare
+    `args`/`inputs`/`outputs`/`state`/`events`/`audio`, with `state` typed as `Hash`
   - `args.state` (entities, `new_entity`, `new_entity_strict`), `args.grid`, `args.events`, `args.pixel_array(s)`
   - The `DR` and `Grid` constants, plus the `$grid` and `$state` globals
   - `Grid` orientation/origin, all-screen and pixel-category properties

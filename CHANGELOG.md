@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+- Adds `module Main` support: the `boot`/`start`/`tick`/`reset`/`did_reset`/`shutdown` hooks type `args` as
+  `GTK::Args` when they take it, and `args`, `inputs`, `outputs`, `state` (a `Hash`), `events` and `audio`
+  complete as bare calls inside `Main`.
+
 ## [0.1.0] - 2026-10-07
 
 - Initial release: Solargraph plugin (`plugins: [solargraph-dragonruby]`) that adds DragonRuby API pins.
