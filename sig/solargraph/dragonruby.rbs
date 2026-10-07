@@ -1,0 +1,13 @@
+module Solargraph
+  module Dragonruby
+    VERSION: String
+
+    class Convention < Solargraph::Convention::Base
+      STUBS_DIR: String
+
+      def self.pins: () -> Array[Solargraph::Pin::Base]
+
+      def global: (untyped _object) -> Solargraph::Environ
+    end
+  end
+end
