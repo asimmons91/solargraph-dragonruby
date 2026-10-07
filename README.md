@@ -54,7 +54,7 @@ indexed twice.
 - **From dragonruby-yard-doc** (`stubs/upstream`): `GTK::Args`, `GTK::Runtime` (`$gtk`, `$dr`),
   outputs, inputs (keyboard, mouse, controllers), `Geometry`, `Easing`, `Layout`, `Numeric`
   extensions, `Kernel.tick_count`, and the `tick`/`boot`/`reset` hooks.
-- **Added here** (`stubs/extensions`), checked against the DragonRuby 7.21 docs:
+- **Added here** (`stubs/extensions`), checked against the DragonRuby 7.22 docs, sample apps and open-source runtime:
   - `args.state` (entities, `new_entity`, `new_entity_strict`), `args.grid`, `args.events`, `args.pixel_array(s)`
   - The `DR` and `Grid` constants, plus the `$grid` and `$state` globals
   - `Grid` orientation/origin, all-screen and pixel-category properties
@@ -65,6 +65,14 @@ indexed twice.
   - `vec2_*` and other `Geometry` functions, and the Geometry mixin on `Hash`/`Array` (`rect.intersect_rect?(other)`)
   - `Numeric#frame_index`, `elapsed_time`, `to_sf`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
   - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `attr_dr`, `Kernel.global_tick_count`
+- **Indie and Pro APIs** are included. Their hover docs say which license tier they need:
+  - Shaders: `outputs.shader = { path:, uniforms:, textures: }` (Indie/Pro)
+  - C Extensions: `DR.dlopen`, `DR.get_dlopen_path` (Indie/Pro)
+  - HD and All Screen: `DR.set_hd_max_scale`, `set_hd_letterbox`, `toggle_hd_letterbox`, `Layout.allscreen_rect`,
+    and `Grid`'s all-screen, pixel-category and scale properties (Pro)
+  - `DR.start_text_input`/`stop_text_input`, `args.inputs.http_requests` (Pro)
+
+  Completions don't depend on your license, so check the hover note before relying on one of these.
 
 ## Editor setup
 

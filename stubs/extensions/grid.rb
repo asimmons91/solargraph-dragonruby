@@ -57,72 +57,111 @@ module GTK
     def aspect_size; end
 
     # @!group All Screen (area outside the 16:9 safe area, when the window overflows it)
+    #
+    # Pro license: only meaningful with `hd_letterbox=false` in
+    # `game_metadata.txt` (edge-to-edge rendering). Otherwise they match the
+    # logical values.
 
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_left; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_x; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_right; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_y; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_top; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_bottom; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_w; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_h; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Hash] rect covering the whole window
     def allscreen_rect; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_offset_x; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
     def allscreen_offset_y; end
+    # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Hash] `x`, `y` offsets of the safe area within the window
     def allscreen_offset; end
 
     # @!endgroup
 
-    # @!group Pixel category (same as logical values on a Standard license)
+    # @!group Pixel category
+    #
+    # Pro license: real pixel values require `hd=true` in `game_metadata.txt`.
+    # Without it (and on Standard), they return the logical values.
 
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def w_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def h_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def left_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def right_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def top_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def bottom_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_left_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_right_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_top_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_bottom_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_offset_x_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
     def allscreen_offset_y_px; end
 
     # @!endgroup
 
+    # Pro license (HD mode, `hd=true`).
+    #
     # @return [Float] native scale of the window compared to 720p
     def native_scale; end
 
+    # Pro license (HD mode, `hd=true`).
+    #
     # @return [Float] best-fit pixel-perfect render scale compared to 720p (see `hd_max_scale`)
     def render_scale; end
 
+    # Pro license (HD mode, `hd=true`).
+    #
     # @return [Float] rendering scale for textures (720p: `1.0`, 1080p: `1.5`, 4k: `3.0`, ...)
     def texture_scale; end
 
+    # Pro license (HD mode, `hd=true`).
+    #
     # @return [Integer] best-fit texture atlas scale (720p: `100`, 1080p: `150`, ...)
     def texture_scale_enum; end
 

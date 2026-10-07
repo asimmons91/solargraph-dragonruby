@@ -155,5 +155,106 @@ module GTK
     #
     # @return [Symbol, nil] `:unknown`, `:nominal`, `:fair`, `:serious`, or `:critical`; `nil` on other platforms
     def current_thermal_state; end
+
+    # @!group Indie and Pro
+
+    # Loads a precompiled C Extension by library name (no `lib` prefix or
+    # platform-specific extension). See `samples/12_c_extensions`.
+    #
+    # Indie or Pro license to compile C Extensions or publish games that use
+    # them. Standard can load them in dev mode only; calling this in
+    # production raises.
+    #
+    # @param name [String]
+    # @return [void]
+    def dlopen name; end
+
+    # Indie or Pro license.
+    #
+    # @param name [String, nil] library name, to get its full path
+    # @return [String] the path searched for dynamic libraries by #dlopen
+    def get_dlopen_path name = nil; end
+
+    # Updates the `hd_max_scale` metadata value while the game is running,
+    # for testing scaling on edge-to-edge displays. Development only.
+    #
+    # Pro license (no-op otherwise).
+    #
+    # @param scale [Integer] `100` (720p), `125` (HD+), `150` (1080p), `175` (Full HD+),
+    #   `200` (1440p), `250` (1800p), `300` (4k), or `400` (5k)
+    # @return [void]
+    def set_hd_max_scale scale; end
+
+    # Adds or removes the letterbox (`hd_letterbox` in `game_metadata.txt`)
+    # while the game is running. Development only.
+    #
+    # Pro license (no-op otherwise).
+    #
+    # @return [void]
+    def toggle_hd_letterbox; end
+
+    # Adds (`true`) or removes (`false`) the letterbox (`hd_letterbox` in
+    # `game_metadata.txt`) while the game is running. Development only.
+    #
+    # Pro license (no-op otherwise).
+    #
+    # @param letterbox [Boolean]
+    # @return [void]
+    def set_hd_letterbox letterbox; end
+
+    # Starts text input so `args.inputs.text` is populated. On touch devices
+    # this shows the on-screen keyboard.
+    #
+    # Pro license.
+    #
+    # @return [void]
+    def start_text_input; end
+
+    # Stops text input and dismisses the on-screen keyboard.
+    #
+    # Pro license.
+    #
+    # @return [void]
+    def stop_text_input; end
+
+    # @!endgroup
+
+    # A request received by the in-game web server (`DR.start_server!`), from
+    # `args.inputs.http_requests`. Requests not responded to are rejected
+    # automatically after 30 seconds.
+    #
+    # Pro license.
+    class HTTPRequest
+      # @return [String]
+      attr_reader :id
+
+      # @return [String] client address
+      attr_reader :address
+
+      # @return [String] e.g. `"GET"`, `"POST"`
+      attr_reader :method
+
+      # @return [String] e.g. `"/"`
+      attr_reader :uri
+
+      # @return [Hash{String => String}]
+      attr_reader :headers
+
+      # @return [String, nil]
+      attr_reader :raw_body
+
+      # @return [Object] the request body
+      attr_reader :body
+
+      # @param httpcode [Integer] e.g. `200`
+      # @param body [String, nil]
+      # @param headers [Hash{String => String}, nil]
+      # @return [void]
+      def respond httpcode, body = nil, headers = nil; end
+
+      # Responds with `400` and a plain-text rejection message.
+      # @return [void]
+      def reject; end
+    end
   end
 end

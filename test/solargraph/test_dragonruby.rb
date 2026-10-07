@@ -141,4 +141,45 @@ class Solargraph::TestDragonruby < Minitest::Test
   def test_outputs_watch
     assert_includes complete("args.outputs.debug.wat"), "watch"
   end
+
+  def test_buffered_click_returns_mouse_point
+    assert_includes complete("args.inputs.mouse.buttons.left.buffered_click.created_"), "created_at"
+    assert_includes complete("args.inputs.mouse.buffered_held.glob"), "global_created_at"
+    assert_includes complete("args.inputs.mouse.buttons.right.buffered_click.inside_"), "inside_rect?"
+  end
+
+  # Indie and Pro
+
+  def test_shader
+    assert_includes complete("args.outputs.shad"), "shader"
+    assert_includes complete("args.outputs[:rt].shad"), "shader"
+  end
+
+  def test_pro_runtime_functions
+    names = complete("DR.st")
+    assert_includes names, "start_text_input"
+    assert_includes names, "stop_text_input"
+    assert_includes complete("DR.get_dl"), "get_dlopen_path"
+  end
+
+  def test_http_requests
+    assert_includes complete("args.inputs.http_requests.first.resp"), "respond"
+  end
+
+  def test_layout_allscreen_rect
+    assert_includes complete("Layout.allscreen_"), "allscreen_rect"
+  end
+
+  def test_tier_notes_replace_upstream_docs
+    %w[dlopen set_hd_max_scale set_hd_letterbox toggle_hd_letterbox].each do |name|
+      stack = self.class.api_map.get_method_stack("GTK::Runtime", name)
+      assert_equal 1, stack.length, name
+      assert_match(/Pro license/, stack.first.docstring.to_s, name)
+    end
+  end
+
+  def test_inputs_text_returns_string_array
+    stack = self.class.api_map.get_method_stack("GTK::Inputs", "text")
+    assert_equal ["Array<String>"], stack.map { |pin| pin.return_type.to_s }
+  end
 end

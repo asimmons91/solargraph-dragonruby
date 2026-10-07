@@ -232,11 +232,17 @@ module GTK
     # @return [Integer, nil] `Kernel.global_tick_count` the hold started
     attr_reader :global_held_at
 
-    # @return [Boolean] true if exclusively determined to be a click (not a hold)
-    attr_reader :buffered_click
+    # The click, if the button was exclusively determined to be a click
+    # (released quickly without moving far) and won't be considered held.
+    #
+    # @return [GTK::MousePoint, nil] where and when the click happened, or `nil`
+    def buffered_click; end
 
-    # @return [Boolean] true if exclusively determined to be a hold (not a click)
-    attr_reader :buffered_held
+    # The hold, if the button was exclusively determined to be held (pressed
+    # long enough or dragged) and won't be considered a click.
+    #
+    # @return [GTK::MousePoint, nil] current position and when the hold started, or `nil`
+    def buffered_held; end
   end
 
   class MouseButtons
@@ -249,5 +255,38 @@ module GTK
     #
     # @return [GTK::MouseButtons]
     attr_reader :buttons
+
+    # MouseButton#buffered_click of the first button that has one.
+    #
+    # @return [GTK::MousePoint, nil]
+    def buffered_click; end
+
+    # MouseButton#buffered_held of the first button that has one.
+    #
+    # @return [GTK::MousePoint, nil]
+    def buffered_held; end
+  end
+
+  class MousePoint
+    # @return [Numeric]
+    attr_accessor :x, :y
+  end
+
+  class Inputs
+    # Text typed since the last frame, including IME/international input.
+    # Only populated after `DR.start_text_input` (on touch devices that also
+    # shows the on-screen keyboard; `DR.stop_text_input` dismisses it). For
+    # simple key handling prefer `args.inputs.keyboard.key_down.char`.
+    #
+    # @return [Array<String>]
+    def text; end
+
+    # Pending requests to the in-game web server started with
+    # `DR.start_server!`. Respond to each with `request.respond 200, "ok"`.
+    #
+    # Pro license.
+    #
+    # @return [Array<GTK::Runtime::HTTPRequest>]
+    attr_reader :http_requests
   end
 end
