@@ -6,9 +6,10 @@ class Solargraph::TestDragonruby < Minitest::Test
   Convention = Solargraph::Dragonruby::Convention
 
   # Building an ApiMap loads Ruby's core pins, so share one across tests and
-  # re-map the game source per test.
+  # re-map the game source per test. The plugin's pins only arrive on catalog,
+  # so catalog up front for tests that query the map without mapping a source.
   def self.api_map
-    @api_map ||= Solargraph::ApiMap.new
+    @api_map ||= Solargraph::ApiMap.new.catalog(Solargraph::Bench.new)
   end
 
   # Completes `expr` (with the cursor at its end) inside `def tick args`.
