@@ -9,5 +9,11 @@ module Solargraph
 
       def global: (untyped _object) -> Solargraph::Environ
     end
+
+    class MacroNode < Solargraph::Parser::NodeProcessor::Base
+      MACROS: Hash[Symbol, String]
+
+      def process: () -> bool
+    end
   end
 end

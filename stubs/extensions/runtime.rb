@@ -22,20 +22,6 @@ class ::Kernel
   end
 end
 
-class ::Module
-  # Class macro that adds DragonRuby's environment methods (`args`, `state`,
-  # `inputs`, `outputs`, `audio`, `grid`, `events`, ...) to instances of the
-  # class, so `args` doesn't have to be passed around. Set `instance.args = args`
-  # before using them.
-  #
-  # @return [void]
-  def attr_dr; end
-
-  # Older name for #attr_dr.
-  # @return [void]
-  def attr_gtk; end
-end
-
 module GTK
   class Runtime
     # Resizes the window. Development/debugging only; not guaranteed to work

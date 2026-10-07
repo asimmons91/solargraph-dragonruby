@@ -27,6 +27,18 @@ module Main
 end
 ```
 
+So do DragonRuby's class macros:
+
+```ruby
+class Ship
+  attr_sprite                         # x, y, w, h, path, angle, ... plus top, right, intersect_rect?, ...
+end
+
+class Game
+  attr_dr                             # or attr_gtk: args, state, inputs, outputs, grid, ... on self
+end
+```
+
 The API definitions are YARD stubs. Most of them come from
 [owenbutler/dragonruby-yard-doc](https://github.com/owenbutler/dragonruby-yard-doc),
 with extra coverage added here (see [What's covered](#whats-covered)).
@@ -80,7 +92,9 @@ indexed twice.
   - `args.inputs.mouse.buttons.left.buffered_click` and the other mouse button properties
   - `vec2_*` and other `Geometry` functions, and the Geometry mixin on `Hash`/`Array` (`rect.intersect_rect?(other)`)
   - `Numeric#frame_index`, `elapsed_time`, `to_sf`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
-  - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `attr_dr`, `Kernel.global_tick_count`
+  - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `Kernel.global_tick_count`
+  - The `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect` and `attr_label` class macros: calling one in a class (or in one
+    of its instance methods) completes the methods it adds
 - **Indie and Pro APIs** are included. Their hover docs say which license tier they need:
   - Shaders: `outputs.shader = { path:, uniforms:, textures: }` (Indie/Pro)
   - C Extensions: `DR.dlopen`, `DR.get_dlopen_path` (Indie/Pro)

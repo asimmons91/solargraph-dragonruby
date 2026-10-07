@@ -29,6 +29,14 @@ class Solargraph::TestDragonruby < Minitest::Test
     api.clip_at("main.rb", [2, expr.length + 4]).complete.pins.map(&:name)
   end
 
+  # Like #complete, but inside an instance method of a class whose body is `body`.
+  def complete_in_class(expr, body:)
+    source = Solargraph::Source.load_string("class Player\n  #{body}\n  def update\n    #{expr}\n  end\nend\n", "player.rb")
+    api = self.class.api_map
+    api.map(source)
+    api.clip_at("player.rb", [3, expr.length + 4]).complete.pins.map(&:name)
+  end
+
   def test_that_it_has_a_version_number
     refute_nil ::Solargraph::Dragonruby::VERSION
   end
@@ -190,6 +198,49 @@ class Solargraph::TestDragonruby < Minitest::Test
 
   def test_main_helpers_stay_in_main
     refute_includes complete("outp"), "outputs"
+  end
+
+  # class macros
+
+  def test_attr_dr_adds_environment_methods
+    assert_includes complete_in_class("outp", body: "attr_dr"), "outputs"
+    assert_includes complete_in_class("inputs.keyboard.key_d", body: "attr_dr"), "key_down"
+    assert_includes complete_in_class("state.new_ent", body: "attr_dr"), "new_entity"
+    assert_includes complete_in_class("geometry.inter", body: "attr_dr"), "intersect_rect?"
+  end
+
+  def test_attr_gtk_is_an_alias
+    assert_includes complete_in_class("outp", body: "attr_gtk"), "outputs"
+  end
+
+  def test_attr_sprite_adds_sprite_and_rect_methods
+    {"self.pat" => "path", "self.flip_h" => "flip_horizontally", "self.rig" => "right",
+     "self.intersect_" => "intersect_rect?"}.each do |expr, name|
+      assert_includes complete_in_class(expr, body: "attr_sprite"), name
+    end
+  end
+
+  def test_attr_sprite_completes_on_instances
+    source = Solargraph::Source.load_string("class Ship\n  attr_sprite\nend\nShip.new.pat\n", "ship.rb")
+    api = self.class.api_map
+    api.map(source)
+    assert_includes api.clip_at("ship.rb", [3, 12]).complete.pins.map(&:name), "path"
+  end
+
+  def test_attr_label_and_attr_rect
+    assert_includes complete_in_class("self.size_", body: "attr_label"), "size_px"
+    assert_includes complete_in_class("self.bott", body: "attr_rect"), "bottom"
+  end
+
+  def test_macro_called_in_an_instance_method
+    source = Solargraph::Source.load_string("class Game\n  def initialize\n    attr_dr\n  end\n  def tick\n    outp\n  end\nend\n", "game.rb")
+    api = self.class.api_map
+    api.map(source)
+    assert_includes api.clip_at("game.rb", [5, 8]).complete.pins.map(&:name), "outputs"
+  end
+
+  def test_macros_only_affect_their_class
+    refute_includes complete_in_class("outp", body: "attr_reader :hp"), "outputs"
   end
 
   # Indie and Pro
