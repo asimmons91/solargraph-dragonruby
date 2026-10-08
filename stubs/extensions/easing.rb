@@ -14,6 +14,28 @@ module GTK
       # @return [Float] the value on the curve; the last point of the spline once `duration` has passed
       def spline start_tick, current_tick, duration, spline; end
 
+      # Progress (`0.0` to `1.0`) of chained easing definitions over `duration`.
+      #
+      # @example
+      #   Easing.ease 60, Kernel.tick_count, 120, :smooth_stop_quad
+      #
+      # @param start_tick [Integer]
+      # @param current_tick [Integer]
+      # @param duration [Integer] duration in ticks
+      # @param definitions [Array<Symbol, Proc>] `:identity`, `:flip`, `:quad`, `:cube`, `:quart`, `:quint`,
+      #   `:smooth_start_quad`, `:smooth_stop_quad`, ..., or lambdas taking `x`
+      # @return [Float]
+      def ease start_tick, current_tick, duration, *definitions; end
+
+      # Same as #spline.
+      #
+      # @param start_tick [Integer]
+      # @param current_tick [Integer]
+      # @param duration [Integer] duration in ticks
+      # @param spline [Array<Array<Numeric>>] bezier definitions, four values each
+      # @return [Float]
+      def ease_spline start_tick, current_tick, duration, spline; end
+
       # Accelerating ease (`perc ** power`). Pass either
       # `initial:`, `final:`, `perc:` or `start_at:` with `end_at:` or `duration:`.
       #

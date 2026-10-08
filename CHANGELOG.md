@@ -26,6 +26,15 @@
   - `DR.pause!`, `serialize_state`/`deserialize_state`, `set_rng`, `notify`, `http_head`/`http_put`, `platform`, ...,
     `outputs.render_target_state`, `outputs.a11y`, `watch_fps`, and `File.append`
 - Fixes the `Layout.rect` signature (keyword arguments).
+- Types the Hashes DragonRuby returns, so their fields complete (`Geometry.vec2_add(a, b).x`,
+  `Layout.rect(...).center.x`, `DR.http_get(url).response_data`, ...): adds phantom `Typing::PointHash`, `RectHash`,
+  `RectPropsHash`, `LineHash`, `CircleHash`, `ColorHash`, `SizeHash`, and record types for `Numeric#frame`, http
+  responses, `DR.stat_file`, `keyboard.keys` and render target state. Shape parameters are documented as
+  `[Typing::Rect, Object]` (and `Point`, `Line`, `Circle`), which still accepts any value.
+- Types `MouseButton#click`/`down`/`held`/`up` as `MousePoint`, `Easing.ease` definitions as `Array<Symbol, Proc>`, and
+  makes `Layout.rect_group`/`point` and `Numeric#to_layout_*` take keyword arguments.
+- Fixes upstream Geometry docs: `line_intersect`/`ray_intersect` return types, mismatched parameter names, and the
+  signatures of `inside_rect?`, `point_inside_circle?`, `rotate_point`, `rect_navigate`, `zoom_rect`, `line_to_points`, ...
 
 ## [0.1.0] - 2026-10-07
 

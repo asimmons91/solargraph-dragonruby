@@ -52,13 +52,13 @@ module GTK
     # @return [Boolean]
     def all? keys; end
 
-    # @return [Hash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are in this state
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are in this state
     def directional_vector; end
 
-    # @return [Hash, nil] normalized `x`, `y` from WASD keys only
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from WASD keys only
     def directional_vector_wasd; end
 
-    # @return [Hash, nil] normalized `x`, `y` from arrow keys only
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from arrow keys only
     def directional_vector_arrow; end
 
     # @return [Float, nil] angle in degrees of #directional_vector
@@ -140,17 +140,20 @@ module GTK
     # @return [Integer] `-1` (down), `0`, or `+1` (up) from arrow keys only
     def up_down_arrow; end
 
-    # @return [Hash, nil] normalized `x`, `y` from WASD keys only; `nil` if none are down or held
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from WASD keys only; `nil` if none are down or held
     def directional_vector_wasd; end
 
-    # @return [Hash, nil] normalized `x`, `y` from arrow keys only; `nil` if none are down or held
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from arrow keys only; `nil` if none are down or held
     def directional_vector_arrow; end
 
-    # @return [Hash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are down or held
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are down or held
     def directional_vector; end
 
     # @return [Float, nil] angle in degrees of #directional_vector; `nil` if no direction is down or held
     def directional_angle; end
+
+    # @return [Typing::KeyStatesHash] keys in each state (`down`, `held`, `down_or_held`, `up`, `repeat`)
+    def keys; end
   end
 
   # Button states for one event type (`key_down`, `key_held`, `key_up`),
@@ -166,7 +169,7 @@ module GTK
     # @return [Array<Symbol>] all buttons in this state
     def truthy_keys; end
 
-    # @return [Hash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
     def directional_vector; end
 
     # @return [Float, nil] angle in degrees of #directional_vector
@@ -214,31 +217,31 @@ module GTK
     # @return [Boolean] true if right is pressed or held on the dpad only
     def right_dpad; end
 
-    # @return [Hash, nil] normalized `x`, `y` from the dpad only; `nil` if nothing is pressed
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from the dpad only; `nil` if nothing is pressed
     def directional_vector_dpad; end
 
-    # @return [Hash] normalized `x`, `y` from the left analog stick
+    # @return [Typing::PointHash] normalized `x`, `y` from the left analog stick
     def directional_vector_left_analog; end
 
-    # @return [Hash, nil] cardinal-snapped `x`, `y` from the left analog stick; `nil` at rest
+    # @return [Typing::PointHash, nil] cardinal-snapped `x`, `y` from the left analog stick; `nil` at rest
     def directional_vector_left_analog_cardinal; end
 
-    # @return [Hash] normalized `x`, `y` from the right analog stick
+    # @return [Typing::PointHash] normalized `x`, `y` from the right analog stick
     def directional_vector_right_analog; end
 
-    # @return [Hash, nil] cardinal-snapped `x`, `y` from the right analog stick; `nil` at rest
+    # @return [Typing::PointHash, nil] cardinal-snapped `x`, `y` from the right analog stick; `nil` at rest
     def directional_vector_right_analog_cardinal; end
 
-    # @return [Hash] normalized `x`, `y` from the dpad and left analog stick
+    # @return [Typing::PointHash] normalized `x`, `y` from the dpad and left analog stick
     def directional_vector_left; end
 
-    # @return [Hash] normalized `x`, `y` from the right analog stick, falling back to the face buttons
+    # @return [Typing::PointHash] normalized `x`, `y` from the right analog stick, falling back to the face buttons
     def directional_vector_right; end
 
-    # @return [Hash] normalized `x`, `y` using the face buttons as directions (twin-stick style)
+    # @return [Typing::PointHash] normalized `x`, `y` using the face buttons as directions (twin-stick style)
     def directional_vector_buttons; end
 
-    # @return [Hash, nil] normalized `x`, `y` from the dpad and left analog stick; `nil` at rest
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from the dpad and left analog stick; `nil` at rest
     def directional_vector; end
 
     # @return [Float, nil] angle in degrees of #directional_vector; `nil` at rest
@@ -279,7 +282,7 @@ module GTK
     # @return [Integer] `0` to `4`
     attr_reader :index
 
-    # @return [Object, nil] truthy if the button was clicked/down
+    # @return [GTK::MousePoint, nil] where and when the button was clicked/down, or `nil`
     attr_reader :click
 
     # @return [Integer, nil] `Kernel.tick_count` of the click
@@ -288,7 +291,7 @@ module GTK
     # @return [Integer, nil] `Kernel.global_tick_count` of the click
     attr_reader :global_click_at
 
-    # @return [Object, nil] truthy if the button was released
+    # @return [GTK::MousePoint, nil] where and when the button was released, or `nil`
     attr_reader :up
 
     # @return [Integer, nil] `Kernel.tick_count` of the release
@@ -297,7 +300,7 @@ module GTK
     # @return [Integer, nil] `Kernel.global_tick_count` of the release
     attr_reader :global_up_at
 
-    # @return [Object, nil] truthy if the button is held
+    # @return [GTK::MousePoint, nil] current position and when the hold started, or `nil`
     attr_reader :held
 
     # @return [Integer, nil] `Kernel.tick_count` the hold started
@@ -306,7 +309,7 @@ module GTK
     # @return [Integer, nil] `Kernel.global_tick_count` the hold started
     attr_reader :global_held_at
 
-    # @return [Object, nil] same as #click
+    # @return [GTK::MousePoint, nil] same as #click
     attr_reader :down
 
     # @return [Integer, nil] same as #click_at
@@ -376,36 +379,44 @@ module GTK
     # The mouse as a zero-size rect. `offset` (`{ x:, y: }`) is added to the
     # position, e.g. to get the mouse relative to a render target's origin.
     #
-    # @param offset [Hash, nil]
-    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    # @param offset [Typing::Point, Object, nil]
+    # @return [Typing::RectHash] `{ x:, y:, w: 0, h: 0 }`
     def rect offset: nil; end
+
+    # @param center_point [Typing::Point, Object] responds to `x`, `y`
+    # @param radius [Float]
+    # @return [Boolean] true if the mouse is inside the circle
+    def inside_circle? center_point, radius; end
+
+    # @return [Typing::PointHash, nil] wheel movement on each axis this frame, or `nil`
+    attr_reader :wheel
 
     # The mouse position. `offset` (`{ x:, y: }`) is added to it.
     #
-    # @param offset [Hash, nil]
-    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    # @param offset [Typing::Point, Object, nil]
+    # @return [Typing::RectHash] `{ x:, y:, w: 0, h: 0 }`
     def point offset: nil; end
 
     # Same as #point.
     #
-    # @param offset [Hash, nil]
-    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    # @param offset [Typing::Point, Object, nil]
+    # @return [Typing::RectHash] `{ x:, y:, w: 0, h: 0 }`
     def position offset: nil; end
 
-    # @param rect [Hash, Object] responds to `x`, `y`, `w`, `h`
-    # @param offset [Hash, nil] added to the mouse position first
+    # @param rect [Typing::Rect, Object] responds to `x`, `y`, `w`, `h`
+    # @param offset [Typing::Point, Object, nil] added to the mouse position first
     # @return [Boolean] true if the mouse is inside `rect`
     def inside_rect? rect, offset: nil; end
 
-    # @param other_rect [Hash, Object] responds to `x`, `y`, `w`, `h`
-    # @param offset [Hash, nil] ignored by the runtime
+    # @param other_rect [Typing::Rect, Object] responds to `x`, `y`, `w`, `h`
+    # @param offset [Typing::Point, Object, nil] ignored by the runtime
     # @return [Boolean] true if the mouse intersects `other_rect`
     def intersect_rect? other_rect, offset: nil; end
 
-    # @return [Hash] #point offset by `Grid.allscreen_offset`
+    # @return [Typing::RectHash] #point offset by `Grid.allscreen_offset`
     def point_allscreen_offset; end
 
-    # @return [Hash] #rect offset by `Grid.allscreen_offset`
+    # @return [Typing::RectHash] #rect offset by `Grid.allscreen_offset`
     def rect_allscreen_offset; end
 
     # @return [Integer] always `0`
@@ -515,17 +526,17 @@ module GTK
     # @return [Integer] `0` for the first finger down, `1` for the second, ...
     attr_reader :touch_order
 
-    # @return [Hash] `{ x:, y: }`
+    # @return [Typing::PointHash] `{ x:, y: }`
     def point; end
 
-    # @return [Hash] `{ x:, y: }` (same as #point)
+    # @return [Typing::PointHash] `{ x:, y: }` (same as #point)
     def position; end
 
-    # @param rect [Hash, Object] responds to `x`, `y`, `w`, `h`
+    # @param rect [Typing::Rect, Object] responds to `x`, `y`, `w`, `h`
     # @return [Boolean]
     def inside_rect? rect; end
 
-    # @param center [Hash, Object] responds to `x`, `y`
+    # @param center [Typing::Point, Object] responds to `x`, `y`
     # @param radius [Numeric]
     # @return [Boolean]
     def inside_circle? center, radius; end
@@ -538,7 +549,7 @@ module GTK
     # @return [Integer, Boolean, nil] truthy if the direction entered this state
     attr_reader :up, :down, :left, :right
 
-    # @return [Hash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
     def directional_vector; end
 
     # @return [Float, nil] angle in degrees of #directional_vector
@@ -552,6 +563,18 @@ module GTK
   end
 
   class MousePoint
+    # @return [Typing::RectHash] `x`, `y` of the click, with `w`, `h` always `0`
+    attr_reader :point
+
+    # @param rect [Typing::Rect, Object] responds to `x`, `y`, `w`, `h`
+    # @return [Boolean] true if the click is inside `rect`
+    def inside_rect? rect; end
+
+    # @param center_point [Typing::Point, Object] responds to `x`, `y`
+    # @param radius [Float]
+    # @return [Boolean] true if the click is inside the circle
+    def inside_circle? center_point, radius; end
+
     # @return [Numeric]
     attr_accessor :x, :y
   end
@@ -577,6 +600,16 @@ module GTK
     #
     # @return [Hash{Integer => GTK::FingerTouch}]
     attr_reader :touch
+
+    # A touch point on the left half of the screen, as a 1x1 rect.
+    #
+    # @return [Typing::RectHash, nil]
+    attr_reader :finger_left
+
+    # A touch point on the right half of the screen, as a 1x1 rect.
+    #
+    # @return [Typing::RectHash, nil]
+    attr_reader :finger_right
 
     # Directions pressed on this frame on the keyboard or `controller_one`,
     # e.g. `args.inputs.key_down.left`.
@@ -621,7 +654,7 @@ module GTK
     # @return [Integer] `-1` (down), `0`, or `+1` (up) from the arrow keys and dpad only (no WASD or analog)
     def up_down_arrow; end
 
-    # @return [Hash, nil] normalized `x`, `y` from the keyboard, falling back to `controller_one`; `nil` at rest
+    # @return [Typing::PointHash, nil] normalized `x`, `y` from the keyboard, falling back to `controller_one`; `nil` at rest
     def directional_vector; end
 
     # @return [Float, nil] angle in degrees of #directional_vector; `nil` at rest

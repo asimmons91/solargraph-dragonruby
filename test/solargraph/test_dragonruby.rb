@@ -243,6 +243,32 @@ class Solargraph::TestDragonruby < Minitest::Test
     assert_includes complete("args.outputs.debug.watch_f"), "watch_fps"
   end
 
+  def test_shape_returns_complete_fields_and_hash_methods
+    assert_includes complete("Geometry.vec2_add(a, b).x"), "x"
+    assert_includes complete("Geometry.vec2_add(a, b).mer"), "merge"
+    assert_includes complete("args.inputs.directional_vector.y"), "y"
+    assert_includes complete("Grid.rect.w"), "w"
+    assert_includes complete("Layout.rect(row: 0, col: 0).center.x"), "x"
+    assert_includes complete("Geometry.rect_to_lines(r).first.x"), "x2"
+    assert_includes complete("Geometry.rect_to_circle(r).rad"), "radius"
+    assert_includes complete("args.outputs.background_color_h.r"), "r"
+  end
+
+  def test_record_returns_complete_fields
+    assert_includes complete("0.frame(count: 4).frame_"), "frame_index"
+    assert_includes complete("DR.http_get(url).respon"), "response_data"
+    assert_includes complete("DR.stat_file(path).file_"), "file_size"
+    assert_includes complete("args.inputs.keyboard.keys.down_or"), "down_or_held"
+    assert_includes complete("args.outputs.render_target_state[:rt].rea"), "ready"
+    assert_includes complete("args.inputs.mouse.buttons.left.click.created_"), "created_at"
+  end
+
+  def test_shape_params_accept_any_object
+    pin = self.class.api_map.get_method_stack("GTK::Geometry", "intersect_rect?", scope: :class).first
+    rect_1 = pin.docstring.tags(:param).find { |tag| tag.name == "rect_1" }
+    assert_equal ["Typing::Rect", "Object"], rect_1.types
+  end
+
   def test_audio_volume_and_zlib
     assert_includes complete("args.audio.volu"), "volume"
     assert_includes complete("Zlib.compr"), "compress"

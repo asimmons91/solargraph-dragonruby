@@ -38,7 +38,7 @@ module GTK
     # @return [Numeric] right of the grid
     def right; end
 
-    # @return [Hash] a rect primitive (`x`, `y`, `w`, `h`) representing the grid
+    # @return [Typing::RectHash] a rect primitive (`x`, `y`, `w`, `h`) representing the grid
     def rect; end
 
     # @return [Numeric] the grid's width
@@ -87,7 +87,7 @@ module GTK
     # @return [Numeric]
     def allscreen_h; end
     # Pro license: only differs from the logical value with `hd_letterbox=false`.
-    # @return [Hash] rect covering the whole window
+    # @return [Typing::RectHash] rect covering the whole window
     def allscreen_rect; end
     # Pro license: only differs from the logical value with `hd_letterbox=false`.
     # @return [Numeric]
@@ -96,7 +96,7 @@ module GTK
     # @return [Numeric]
     def allscreen_offset_y; end
     # Pro license: only differs from the logical value with `hd_letterbox=false`.
-    # @return [Hash] `x`, `y` offsets of the safe area within the window
+    # @return [Typing::PointHash] `x`, `y` offsets of the safe area within the window
     def allscreen_offset; end
 
     # @!endgroup
@@ -180,7 +180,7 @@ module GTK
     # @return [Numeric] y of the center of the screen
     def center_y; end
 
-    # @return [Hash] center of the screen as `{ x:, y:, w: 0, h: 0 }`
+    # @return [Typing::RectHash] center of the screen as `{ x:, y:, w: 0, h: 0 }`
     def center; end
 
     # @return [Numeric] half of #w
@@ -217,7 +217,7 @@ module GTK
     # @return [Numeric]
     def y_px; end
     # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
-    # @return [Hash] `{ x:, y:, w:, h: }`
+    # @return [Typing::RectHash] `{ x:, y:, w:, h: }`
     def rect_px; end
     # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
     # @return [Numeric]
@@ -232,10 +232,10 @@ module GTK
     # @return [Numeric]
     def allscreen_h_px; end
     # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
-    # @return [Hash] `{ x:, y:, w:, h: }`
+    # @return [Typing::RectHash] `{ x:, y:, w:, h: }`
     def allscreen_rect_px; end
     # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
-    # @return [Hash] `{ x:, y: }`
+    # @return [Typing::PointHash] `{ x:, y: }`
     def allscreen_offset_px; end
   end
 end

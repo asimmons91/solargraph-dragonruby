@@ -45,6 +45,45 @@ module GTK
     # @return [void]
     def raise_window; end
 
+    # Async http GET. The response is filled in over the following ticks.
+    #
+    # @example
+    #   args.state.result ||= DR.http_get "https://example.com"
+    #   puts args.state.result[:response_data] if args.state.result[:complete]
+    #
+    # @param uri [String]
+    # @param headers [Array<String>, nil]
+    # @return [Typing::HTTPResponseHash]
+    def http_get uri, headers = nil; end
+
+    # Async http POST of form fields.
+    #
+    # @param uri [String]
+    # @param form_fields [Hash, nil]
+    # @param headers [Array<String>, nil] e.g. `["Content-Type: application/x-www-form-urlencoded"]`
+    # @return [Typing::HTTPResponseHash]
+    def http_post uri, form_fields = nil, headers = nil; end
+
+    # Async http POST of a raw body.
+    #
+    # @param uri [String]
+    # @param body [String]
+    # @param headers [Array<String>, nil]
+    # @return [Typing::HTTPResponseHash]
+    def http_post_body uri, body, headers = nil; end
+
+    # @param path [String]
+    # @return [Typing::FileStatHash, nil] the file's attributes, or `nil` if it doesn't exist
+    def stat_file path; end
+
+    # @param path [String] a sprite
+    # @return [Array(Integer, Integer)] width and height of the sprite
+    def calcspritebox path; end
+
+    # @param path [String] a sprite
+    # @return [Typing::RectPropsHash] `x` and `y` (always `0`), `w`, `h`, and `center`
+    def get_sprite_rect path; end
+
     # Pauses the game: `tick` stops being called until #unpause!.
     #
     # @return [void]
@@ -142,7 +181,7 @@ module GTK
 
     # @param uri [String]
     # @param headers [Array<String>, nil]
-    # @return [Object] an http response that will eventually have a value (see #http_get)
+    # @return [Typing::HTTPResponseHash] an http response that will eventually have a value (see #http_get)
     def http_head uri, headers = nil; end
 
     # Uploads the file at `fname`.
@@ -150,7 +189,7 @@ module GTK
     # @param uri [String]
     # @param fname [String]
     # @param headers [Array<String>, nil]
-    # @return [Object] an http response that will eventually have a value (see #http_get)
+    # @return [Typing::HTTPResponseHash] an http response that will eventually have a value (see #http_get)
     def http_put uri, fname, headers = nil; end
 
     # Opens the user's mail client.
@@ -200,7 +239,7 @@ module GTK
     # @param text [String]
     # @param size_enum [Integer]
     # @param font [String]
-    # @return [Hash] with keys `w` and `h`
+    # @return [Typing::SizeHash] with keys `w` and `h`
     def calcstringbox_h text, size_enum = nil, font = nil; end
 
     # Opens a uri in the user's default browser.

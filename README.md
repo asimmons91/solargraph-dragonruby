@@ -111,6 +111,10 @@ indexed twice.
 
   Completions don't depend on your license, so check the hover note before relying on one of these.
 
+Hashes that DragonRuby returns are typed by their shape, so their keys complete like methods:
+`Geometry.vec2_add(a, b).x`, `Layout.rect(row: 0, col: 0).center.y`, `DR.http_get(url).response_data`. These
+`Typing::*Hash` types are phantom types: they exist only in the stubs.
+
 ## Editor setup
 
 ### VS Code

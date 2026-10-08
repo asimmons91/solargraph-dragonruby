@@ -23,7 +23,7 @@ module GTK
       # @param col [Integer, Array(Integer, Integer)]
       # @param w [Integer]
       # @param h [Integer]
-      # @return [Hash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
+      # @return [Typing::RectPropsHash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
       def allscreen_rect row: 0, col: 0, w: 1, h: 1, **opts; end
 
       # The rect of a cell span on the virtual grid (12 rows by 24 columns, or
@@ -50,7 +50,7 @@ module GTK
       # @param origin [Symbol]
       # @param safe_area [Boolean]
       # @param allscreen [Boolean] align to `Grid.allscreen_rect` (Pro license, All Screen mode)
-      # @return [Hash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
+      # @return [Typing::RectPropsHash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
       def rect row: 0, col: 0, w: 1, h: 1, row_from_bottom: nil, col_from_right: nil, max_width: nil, max_height: nil, dx: 0, dy: 0, include_row_gutter: false, include_col_gutter: false, include_gutter: false, merge: nil, origin: :top_left, safe_area: true, allscreen: false; end
 
       # Lays out `items` one after another, wrapping at the edge of the grid.
@@ -65,7 +65,7 @@ module GTK
       # @param h [Numeric] height of each item in cells
       # @param include_row_gutter [Boolean]
       # @param include_col_gutter [Boolean]
-      # @return [Array<Hash>]
+      # @return [Array<Typing::RectPropsHash>]
       def rects items, direction: :row, row: 0, col: 0, w: 1, h: 1, include_row_gutter: false, include_col_gutter: false; end
 
       # Lays out each Hash in `group:` starting at `row:`/`col:` (or
@@ -76,24 +76,38 @@ module GTK
       # @example
       #   Layout.rect_group(row: 0, col: 0, drow: 0.5, group: [{ text: "a" }, { text: "b" }])
       #
-      # @param opts [Hash] `group:`, `row:`, `col:`, `row_from_bottom:`, `col_from_right:`, `drow:`, `dcol:`,
-      #   `w:`, `h:`, `merge:`, `row_offset:`, `col_offset:`
-      # @return [Array<Hash>]
-      def rect_group opts; end
+      # @param group [Array<Hash>] items to lay out; each may have its own `layout:` rect options
+      # @param row [Numeric, nil] starting row
+      # @param col [Numeric, nil] starting column
+      # @param row_from_bottom [Numeric, nil] starting row counted from the bottom
+      # @param col_from_right [Numeric, nil] starting column counted from the right
+      # @param drow [Numeric] rows to move for each item
+      # @param dcol [Numeric] columns to move for each item
+      # @param w [Numeric] width of each item in cells
+      # @param h [Numeric] height of each item in cells
+      # @param merge [Hash, nil] merged into every result
+      # @param row_offset [Hash, nil] `count:` (and `h:`) of items to center vertically
+      # @param col_offset [Hash, nil] `count:` (and `w:`) of items to center horizontally
+      # @return [Array<Typing::RectPropsHash>]
+      def rect_group group:, row: nil, col: nil, row_from_bottom: nil, col_from_right: nil, drow: 0, dcol: 0, w: 0, h: 0, merge: nil, row_offset: nil, col_offset: nil; end
 
       # A point inside a cell. `row_anchor:`/`col_anchor:` (`0.0` to `1.0`)
-      # pick where in the cell; the default is the cell's top left.
+      # pick where in the cell; the default is the cell's bottom left.
       #
       # @example
       #   Layout.point(row: 7, col: 5.5, row_anchor: 0.5, col_anchor: 0.5)
       #
-      # @param opts [Hash] `row:`, `col:`, `row_anchor:`, `col_anchor:`, and other #rect options
-      # @return [Hash]
-      def point opts = {}; end
+      # @param row [Numeric]
+      # @param col [Numeric]
+      # @param row_anchor [Float, nil] `0.0` (bottom) to `1.0` (top) of the cell
+      # @param col_anchor [Float, nil] `0.0` (left) to `1.0` (right) of the cell
+      # @param rect_options [Hash] other #rect options
+      # @return [Typing::RectPropsHash]
+      def point row: 0, col: 0, row_anchor: nil, col_anchor: nil, **rect_options; end
 
-      # @param reference [Hash] rect to take the size from
-      # @param target [Hash] rect to center on
-      # @return [Hash] a rect the size of `reference` centered on `target`
+      # @param reference [Typing::Rect, Object] rect to take the size from
+      # @param target [Typing::Rect, Object] rect to center on
+      # @return [Typing::RectHash] a rect the size of `reference` centered on `target`
       def rect_center reference, target; end
 
       # @param n [Numeric]
@@ -116,13 +130,13 @@ module GTK
       # @return [Numeric] same as #cell_size
       def cell_height; end
 
-      # @return [Hash] `x`, `y`, `w`, `h` of the area inside the outer gutters
+      # @return [Typing::RectHash] `x`, `y`, `w`, `h` of the area inside the outer gutters
       def control_rect; end
 
-      # @return [Hash] `x`, `y`, `w`, `h` of the safe area
+      # @return [Typing::RectHash] `x`, `y`, `w`, `h` of the safe area
       def safe_rect; end
 
-      # @return [Hash] `x`, `y`, `w`, `h` of the logical canvas
+      # @return [Typing::RectHash] `x`, `y`, `w`, `h` of the logical canvas
       def logical_rect; end
 
       # @return [Symbol] `:landscape` or `:portrait`

@@ -4,7 +4,7 @@ class Numeric
   # `completed`, `elapsed_time`, `frame_elapsed_time`, `duration`.
   # Takes the same arguments as #frame_index.
   #
-  # @return [Hash]
+  # @return [Typing::FrameHash]
   def frame *args, **kwargs; end
 
   # Treating self as the tick an animation started, returns the index of the
@@ -101,11 +101,11 @@ class Numeric
   def max n = nil; end
 
   # @param max_value [Numeric] length of the vector
-  # @return [Hash] `{ x:, y: }` vector for self as an angle in degrees
+  # @return [Typing::PointHash] `{ x:, y: }` vector for self as an angle in degrees
   def to_vector max_value = 1; end
 
   # @param max_value [Numeric] length of the vector
-  # @return [Hash] `{ x:, y: }` vector for self as an angle in radians
+  # @return [Typing::PointHash] `{ x:, y: }` vector for self as an angle in radians
   def to_vector_r max_value = 1; end
 
   # @return [Float] self / 2.0
@@ -279,21 +279,27 @@ class Numeric
   # @return [Numeric]
   def times_with_index &blk; end
 
-  # @param opts [Hash] `col:`, `w:`, `h:`
+  # @param col [Numeric]
+  # @param w [Numeric]
+  # @param h [Numeric]
   # @return [Numeric] y of Layout row self
-  def to_layout_row opts = {}; end
+  def to_layout_row col: 0, w: 0, h: 0; end
 
-  # @param opts [Hash] `w:`, `h:`
+  # @param w [Numeric]
+  # @param h [Numeric]
   # @return [Numeric] x of Layout column self
-  def to_layout_col opts = {}; end
+  def to_layout_col w: 0, h: 0; end
 
-  # @param opts [Hash]
+  # @param col [Numeric]
+  # @param w [Numeric]
+  # @param h [Numeric]
   # @return [Numeric] y of Layout row self, counting from the bottom
-  def to_layout_row_from_bottom opts = {}; end
+  def to_layout_row_from_bottom col: 0, w: 0, h: 0; end
 
-  # @param opts [Hash]
+  # @param w [Numeric]
+  # @param h [Numeric]
   # @return [Numeric] x of Layout column self, counting from the right
-  def to_layout_col_from_right opts = {}; end
+  def to_layout_col_from_right w: 0, h: 0; end
 
   # @return [Numeric] width of self Layout columns
   def to_layout_w; end

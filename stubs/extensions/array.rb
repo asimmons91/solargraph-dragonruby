@@ -11,7 +11,7 @@ class ::Array
   # @return [Boolean] true if any of `items` is in self
   def include_any? *items; end
 
-  # @param other [Object] a rect
+  # @param other [Typing::Rect, Object] a rect
   # @param tolerance [Float]
   # @return [Boolean] true if any element intersects `other`
   def any_intersect_rect? other, tolerance = 0.1; end

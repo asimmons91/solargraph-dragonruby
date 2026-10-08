@@ -58,7 +58,7 @@ module GTK
     # @return [Hash]
     attr_reader :a11y
 
-    # @return [Hash] #background_color as `{ r:, g:, b:, a: }`
+    # @return [Typing::ColorHash] #background_color as `{ r:, g:, b:, a: }`
     def background_color_h; end
 
     # Fragment shader applied to these outputs (the screen, or a render
@@ -79,7 +79,7 @@ module GTK
     #     uniforms: [{ type: :int, value: Kernel.tick_count }]
     #   }
     #
-    # @return [Hash, nil]
+    # @return [Typing::ShaderHash, Hash, nil]
     attr_accessor :shader
   end
 
@@ -118,7 +118,7 @@ module GTK
   # Render targets created via `args.outputs[name]`, by name.
   class RenderTargetState
     # @param name [Symbol, String]
-    # @return [Object, nil] the render target's entry (`path`, `ready`, ...)
+    # @return [Typing::RenderTargetEntryHash, nil] the render target's entry (`path`, `ready`, ...)
     def [] name; end
 
     # @param name [Symbol, String]

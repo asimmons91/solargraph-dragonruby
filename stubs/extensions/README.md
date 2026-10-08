@@ -13,3 +13,8 @@ YARD stubs for DragonRuby APIs that the vendored upstream stubs
   upstream already defines, the upstream pin is dropped (see
   `Solargraph::Dragonruby::Convention.pins`), so the definition here wins.
 - `rake stubs:sync` never touches this directory.
+- Hashes with a known shape use the phantom types in `typing.rb`: return
+  `Typing::PointHash`, `Typing::RectHash`, ... (they subclass Hash), and type
+  shape parameters as `[Typing::Point, Object]`, `[Typing::Rect, Object]`, ...
+  Keep `Object` in parameter types: with only the phantom type,
+  `solargraph typecheck --level strict` rejects plain Hashes.
