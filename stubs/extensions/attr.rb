@@ -96,7 +96,7 @@ module AttrDR
   def easing; end
 
   # Same as `args.audio`.
-  # @return [Hash]
+  # @return [AudioHash]
   def audio; end
 
   # Same as `args.events`.

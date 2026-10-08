@@ -59,12 +59,40 @@ class Numeric
   def to_degrees; end
 
   # Returns self, `l`, or `r`, whichever keeps the value within `l..r`
-  # (in either order).
+  # (in either order). Either bound may be omitted or `nil`.
   #
-  # @param l [Numeric]
-  # @param r [Numeric]
+  # @example
+  #   10.mid(0, 5)         # => 5
+  #   10.mid(l: 0, r: 5)   # => 5
+  #   10.mid(r: 5)         # => 5
+  #
   # @return [Numeric]
-  def mid l, r; end
+  def mid *lr, l: nil, r: nil; end
+
+  # Takes the same arguments as #mid.
+  #
+  # @return [Boolean] true if self is within `l..r` (in either order)
+  def mid? *lr, l: nil, r: nil; end
+
+  # Same as #mid?: unlike Comparable#between?, the bounds may be in either
+  # order, omitted, or named.
+  #
+  # @return [Boolean]
+  def between? *lr, l: nil, r: nil; end
+
+  # @example
+  #   10.min(5)   # => 5
+  #
+  # @param n [Numeric, nil]
+  # @return [Numeric] the smaller of self and `n` (self if `n` is `nil`)
+  def min n = nil; end
+
+  # @example
+  #   0.max(5)   # => 5
+  #
+  # @param n [Numeric, nil]
+  # @return [Numeric] the larger of self and `n` (self if `n` is `nil`)
+  def max n = nil; end
 
   class << self
     # Expanded `rand` that also accepts a Range (`Numeric.rand(-10..10)`).
@@ -77,5 +105,54 @@ class Numeric
     #
     # @return [Integer, nil]
     def frame_index start_at:, count: nil, frame_count: nil, hold_for: 1, repeat: false, repeat_index: 0, tick_count_override: nil; end
+
+    # Returns `m`, `l`, or `r`, whichever keeps the value within `l..r`
+    # (in either order).
+    #
+    # @example
+    #   Numeric.mid(l: 0, m: 10, r: 5)   # => 5
+    #
+    # @param l [Numeric, nil]
+    # @param m [Numeric]
+    # @param r [Numeric, nil]
+    # @return [Numeric, nil] `nil` if `m` is `nil`
+    def mid l: nil, m: nil, r: nil; end
+
+    # Packs a custom blend mode for a primitive's `blendmode:`, mostly
+    # used when rendering to a render target. Factors are the
+    # `BLENDFACTOR_*` constants and operations the `BLENDOPERATION_*` ones:
+    #
+    #   dstRGB = color_operation(srcRGB * src_color_factor, dstRGB * dst_color_factor)
+    #   dstA   = alpha_operation(srcA * src_alpha_factor, dstA * dst_alpha_factor)
+    #
+    # @example hole punch
+    #   Numeric.compose_blendmode(BLENDFACTOR_ZERO, BLENDFACTOR_ONE_MINUS_SRC_ALPHA, BLENDOPERATION_ADD,
+    #                             BLENDFACTOR_ZERO, BLENDFACTOR_ONE_MINUS_SRC_ALPHA, BLENDOPERATION_ADD)
+    #
+    # @param src_color_factor [Integer]
+    # @param dst_color_factor [Integer]
+    # @param color_operation [Integer]
+    # @param src_alpha_factor [Integer]
+    # @param dst_alpha_factor [Integer]
+    # @param alpha_operation [Integer]
+    # @return [Integer]
+    def compose_blendmode src_color_factor, dst_color_factor, color_operation, src_alpha_factor, dst_alpha_factor, alpha_operation; end
   end
 end
+
+# Blend operations and factors for Numeric.compose_blendmode.
+BLENDOPERATION_ADD              = 0x1
+BLENDOPERATION_SUBTRACT         = 0x2
+BLENDOPERATION_REV_SUBTRACT     = 0x3
+BLENDOPERATION_MINIMUM          = 0x4
+BLENDOPERATION_MAXIMUM          = 0x5
+BLENDFACTOR_ZERO                = 0x1
+BLENDFACTOR_ONE                 = 0x2
+BLENDFACTOR_SRC_COLOR           = 0x3
+BLENDFACTOR_ONE_MINUS_SRC_COLOR = 0x4
+BLENDFACTOR_SRC_ALPHA           = 0x5
+BLENDFACTOR_ONE_MINUS_SRC_ALPHA = 0x6
+BLENDFACTOR_DST_COLOR           = 0x7
+BLENDFACTOR_ONE_MINUS_DST_COLOR = 0x8
+BLENDFACTOR_DST_ALPHA           = 0x9
+BLENDFACTOR_ONE_MINUS_DST_ALPHA = 0xA

@@ -41,6 +41,13 @@ module GTK
     #
     # @return [Integer]
     attr_reader :tick_count
+
+    # Audio sources that are playing, keyed by name. Assign a Hash to play
+    # one (`args.audio[:music] = { input: "sounds/music.ogg", looping: true }`);
+    # a `:length` key (seconds) is added on the following tick.
+    #
+    # @return [AudioHash]
+    attr_reader :audio
   end
 
   class Events
@@ -68,4 +75,17 @@ module GTK
     # @return [Array<Integer>]
     attr_accessor :pixels
   end
+end
+
+# The type of `args.audio`: a Hash of audio sources plus a global volume.
+class AudioHash < Hash
+  # Global volume for all audio, from `0.0` to `1.0` (defaults to `1.0`, or
+  # `0.4` on iOS). Web builds in production return `0.0` while the game
+  # doesn't have focus.
+  #
+  # @return [Float]
+  attr_reader :volume
+
+  # @param value [Float] clamped to `0.0..1.0`
+  attr_writer :volume
 end

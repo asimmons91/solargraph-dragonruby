@@ -17,7 +17,16 @@ module GTK
       :eight, :nine, :a, :b, :c, :d, :e, :f,
       :g, :h, :i, :j, :k, :l, :m, :n,
       :o, :p, :q, :r, :s, :t, :u, :v,
-      :w, :x, :y, :z
+      :w, :x, :y, :z,
+      :caps_lock, :home, :end, :page_up, :page_down, :insert, :print_screen, :scroll_lock, :pause,
+      :f1, :f2, :f3, :f4, :f5, :f6, :f7, :f8, :f9, :f10, :f11, :f12,
+      :at, :hash, :caret, :ampersand, :asterisk, :plus, :forward_slash, :back_slash,
+      :less_than, :greater_than, :question_mark, :section, :ordinal_indicator, :superscript_two,
+      :num_lock, :kp_zero, :kp_one, :kp_two, :kp_three, :kp_four, :kp_five, :kp_six, :kp_seven,
+      :kp_eight, :kp_nine, :kp_period, :kp_plus, :kp_minus, :kp_multiply, :kp_divide, :kp_enter, :kp_equals
+
+    # @return [Integer, nil] numeric SDL identifier of the last key in this state
+    attr_reader :raw_key
 
     # @return [Integer, nil] ascii value of the last key in this state (follows OS key repeat for `key_down`)
     attr_reader :char
@@ -42,7 +51,9 @@ module GTK
     # @return [GTK::KeyboardKeys] keys pressed or repeated, based on OS key repeat speed
     attr_reader :key_repeat
 
-    # Keys pressed or held, e.g. `args.inputs.keyboard.space`.
+    # Keys pressed or held, e.g. `args.inputs.keyboard.space`. `hash` is only
+    # available on the key states (`keyboard.key_down.hash`), since
+    # `keyboard.hash` is Object#hash.
     # @return [Integer, false, nil]
     attr_reader :alt, :option, :alt_left, :option_left, :alt_right, :option_right, :meta, :command,
       :meta_left, :command_left, :meta_right, :command_right, :control, :ctrl, :control_left, :ctrl_left,
@@ -56,7 +67,13 @@ module GTK
       :four, :five, :six, :seven, :eight, :nine, :a, :b,
       :c, :d, :e, :f, :g, :h, :i, :j,
       :k, :l, :m, :n, :o, :p, :q, :r,
-      :s, :t, :u, :v, :w, :x, :y, :z
+      :s, :t, :u, :v, :w, :x, :y, :z,
+      :caps_lock, :home, :end, :page_up, :page_down, :insert, :print_screen, :scroll_lock, :pause,
+      :f1, :f2, :f3, :f4, :f5, :f6, :f7, :f8, :f9, :f10, :f11, :f12,
+      :at, :caret, :ampersand, :asterisk, :plus, :forward_slash, :back_slash,
+      :less_than, :greater_than, :question_mark, :section, :ordinal_indicator, :superscript_two,
+      :num_lock, :kp_zero, :kp_one, :kp_two, :kp_three, :kp_four, :kp_five, :kp_six, :kp_seven,
+      :kp_eight, :kp_nine, :kp_period, :kp_plus, :kp_minus, :kp_multiply, :kp_divide, :kp_enter, :kp_equals
 
     # @param key [Symbol]
     # @return [Boolean] true if `key` was pressed on this frame
@@ -95,6 +112,12 @@ module GTK
 
     # @return [Hash, nil] normalized `x`, `y` from arrow keys only; `nil` if none are down or held
     def directional_vector_arrow; end
+
+    # @return [Hash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are down or held
+    def directional_vector; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector; `nil` if no direction is down or held
+    def directional_angle; end
   end
 
   # Button states for one event type (`key_down`, `key_held`, `key_up`),
@@ -265,6 +288,91 @@ module GTK
     #
     # @return [GTK::MousePoint, nil]
     def buffered_held; end
+
+    # Buttons pressed on this frame, e.g. `args.inputs.mouse.key_down.left`.
+    #
+    # @return [GTK::MouseKeys]
+    attr_reader :key_down
+
+    # Buttons held (all frames after `key_down` until released).
+    #
+    # @return [GTK::MouseKeys]
+    attr_reader :key_held
+
+    # Buttons released on this frame.
+    #
+    # @return [GTK::MouseKeys]
+    attr_reader :key_up
+
+    # The mouse as a zero-size rect. `offset` (`{ x:, y: }`) is added to the
+    # position, e.g. to get the mouse relative to a render target's origin.
+    #
+    # @param offset [Hash, nil]
+    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    def rect offset: nil; end
+
+    # The mouse position. `offset` (`{ x:, y: }`) is added to it.
+    #
+    # @param offset [Hash, nil]
+    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    def point offset: nil; end
+  end
+
+  # Mouse button states for one event type, via
+  # `args.inputs.mouse.(key_down|key_held|key_up)`.
+  class MouseKeys
+    # @return [GTK::MousePoint, nil] where and when the button entered this state, or `nil`
+    attr_reader :left, :middle, :right, :x1, :x2
+  end
+
+  # One touch point, from the values of `args.inputs.touch` (touch devices only).
+  class FingerTouch
+    # @return [Numeric]
+    attr_reader :x, :y
+
+    # @return [Numeric] position on the previous frame
+    attr_reader :previous_x, :previous_y
+
+    # @return [Boolean] true if the finger moved on this frame
+    attr_reader :moved
+
+    # @return [Integer] `Kernel.tick_count` the finger last moved
+    attr_reader :moved_at
+
+    # @return [Integer] `Kernel.global_tick_count` the finger last moved
+    attr_reader :global_moved_at
+
+    # @return [Integer] `Kernel.tick_count` the finger touched down
+    attr_reader :down_at
+
+    # @return [Integer] `Kernel.global_tick_count` the finger touched down
+    attr_reader :global_down_at
+
+    # @return [Integer] `0` for the first finger down, `1` for the second, ...
+    attr_reader :touch_order
+
+    # @return [Hash] `{ x:, y: }`
+    def point; end
+
+    # @return [Hash] `{ x:, y: }` (same as #point)
+    def position; end
+
+    # @param rect [Hash, Object] responds to `x`, `y`, `w`, `h`
+    # @return [Boolean]
+    def inside_rect? rect; end
+
+    # @param center [Hash, Object] responds to `x`, `y`
+    # @param radius [Numeric]
+    # @return [Boolean]
+    def inside_circle? center, radius; end
+  end
+
+  # Directional state shared by the keyboard (arrows and WASD) and
+  # `controller_one` for one event type, via
+  # `args.inputs.(key_down|key_held|key_up)`, e.g. `args.inputs.key_down.left`.
+  class KeyboardOrControllerKeys
+    # @return [Integer, Boolean, nil] truthy if the direction entered this state
+    attr_reader :up, :down, :left, :right
   end
 
   class MousePoint
@@ -288,5 +396,53 @@ module GTK
     #
     # @return [Array<GTK::Runtime::HTTPRequest>]
     attr_reader :http_requests
+
+    # All current touch points keyed by touch id (touch devices only).
+    #
+    # @return [Hash{Integer => GTK::FingerTouch}]
+    attr_reader :touch
+
+    # Directions pressed on this frame on the keyboard or `controller_one`,
+    # e.g. `args.inputs.key_down.left`.
+    #
+    # @return [GTK::KeyboardOrControllerKeys]
+    def key_down; end
+
+    # Directions held on the keyboard or `controller_one`.
+    #
+    # @return [GTK::KeyboardOrControllerKeys]
+    def key_held; end
+
+    # Directions released on this frame on the keyboard or `controller_one`.
+    #
+    # @return [GTK::KeyboardOrControllerKeys]
+    def key_up; end
+
+    # Same as #left_right.
+    # @return [Integer] `-1` (left), `0`, or `+1` (right)
+    def left_right_with_wasd; end
+
+    # Same as #left_right_perc.
+    # @return [Float] `-1.0` to `1.0`
+    def left_right_perc_with_wasd; end
+
+    # @return [Integer] `-1` (left), `0`, or `+1` (right) from the arrow keys and dpad only (no WASD or analog)
+    def left_right_arrow; end
+
+    # Same as #left_right_arrow.
+    # @return [Integer] `-1` (left), `0`, or `+1` (right)
+    def left_right_dpad; end
+
+    # Same as #left_right_directional_perc: the left analog stick, falling
+    # back to the dpad and arrow keys (no WASD).
+    # @return [Float] `-1.0` to `1.0`
+    def left_right_perc_dpad; end
+
+    # Same as #up_down.
+    # @return [Integer] `-1` (down), `0`, or `+1` (up)
+    def up_down_with_wasd; end
+
+    # @return [Integer] `-1` (down), `0`, or `+1` (up) from the arrow keys and dpad only (no WASD or analog)
+    def up_down_arrow; end
   end
 end

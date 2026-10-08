@@ -165,6 +165,50 @@ class Solargraph::TestDragonruby < Minitest::Test
     assert_includes complete("args.inputs.mouse.buttons.right.buffered_click.inside_"), "inside_rect?"
   end
 
+  def test_mouse_key_states_and_rect
+    assert_includes complete("args.inputs.mouse.key_down.mid"), "middle"
+    assert_includes complete("args.inputs.mouse.key_up.left.created_"), "created_at"
+    assert_includes complete("args.inputs.mouse.rect.intersect_"), "intersect_rect?"
+    assert_includes complete("args.inputs.mouse.poi"), "point"
+  end
+
+  def test_keyboard_or_controller_key_states
+    assert_includes complete("args.inputs.key_down.lef"), "left"
+    assert_includes complete("args.inputs.key_held.dow"), "down"
+    assert_includes complete("args.inputs.left_right_dp"), "left_right_dpad"
+    assert_includes complete("args.inputs.up_down_arr"), "up_down_arrow"
+  end
+
+  def test_more_keyboard_keys
+    assert_includes complete("args.inputs.keyboard.key_down.f1"), "f12"
+    assert_includes complete("args.inputs.keyboard.kp_ent"), "kp_enter"
+    assert_includes complete("args.inputs.keyboard.key_held.page_"), "page_down"
+    assert_includes complete("args.inputs.keyboard.directional_an"), "directional_angle"
+  end
+
+  def test_touch_values_are_finger_touches
+    assert_includes complete("args.inputs.touch[0].touch_ord"), "touch_order"
+  end
+
+  def test_easing_spline_and_keyword_smooth_functions
+    assert_includes complete("Easing.spl"), "spline"
+    stack = self.class.api_map.get_method_stack("GTK::Easing", "smooth_start", scope: :class)
+    assert_equal 1, stack.length
+    assert_includes stack.first.parameters.map(&:name), "duration"
+  end
+
+  def test_numeric_mid_min_max_and_blendmodes
+    assert_includes complete("10.mid"), "mid?"
+    assert_includes complete("10.mi"), "min"
+    assert_includes complete("Numeric.compose_bl"), "compose_blendmode"
+    assert_includes complete("BLENDFACTOR_ONE_MINUS_SRC_A"), "BLENDFACTOR_ONE_MINUS_SRC_ALPHA"
+  end
+
+  def test_audio_volume_and_zlib
+    assert_includes complete("args.audio.volu"), "volume"
+    assert_includes complete("Zlib.compr"), "compress"
+  end
+
   # module Main
 
   def test_main_helpers

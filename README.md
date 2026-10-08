@@ -89,9 +89,14 @@ indexed twice.
   - More `DR` functions: save data, env vars, window size/position, `on_tick_count`, `benchmark`, `reset_and_replay`, ...
   - Keyboard key states (`key_down.space`, `key_held.truthy_keys`, `key_down?(:enter)`), WASD/arrow helpers
   - Controller dpad and directional vectors, `accept`/`cancel`, and face button aliases (`south`, `east`, ...)
-  - `args.inputs.mouse.buttons.left.buffered_click` and the other mouse button properties
+  - `args.inputs.mouse.buttons.left.buffered_click` and the other mouse button properties, `mouse.key_down.left`,
+    `mouse.rect(offset:)`, and touch points (`args.inputs.touch`)
+  - The shared keyboard-or-controller `args.inputs.key_down.left` and the other key-state directions
+  - Function, numpad and navigation keys (`key_down.f1`, `kp_enter`, `page_down`, ...)
   - `vec2_*` and other `Geometry` functions, and the Geometry mixin on `Hash`/`Array` (`rect.intersect_rect?(other)`)
-  - `Numeric#frame_index`, `elapsed_time`, `to_sf`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
+  - `Numeric#frame_index`, `elapsed_time`, `to_sf`, `mid?`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
+  - `Easing.spline` and keyword `smooth_start`/`smooth_stop`/`smooth_step`, `Numeric.compose_blendmode` with the
+    `BLENDFACTOR_*`/`BLENDOPERATION_*` constants, `args.audio.volume`, and `Zlib`
   - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `Kernel.global_tick_count`
   - The `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect`, `attr_label` and `attr_line` class macros: calling one in a
     class (or in one of its instance methods) completes the methods it adds

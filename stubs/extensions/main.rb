@@ -27,7 +27,7 @@ module Main
   def events; end
 
   # Same as `args.audio`.
-  # @return [Hash]
+  # @return [AudioHash]
   def audio; end
 
   # Called once, at the very beginning of the process, for setup.
