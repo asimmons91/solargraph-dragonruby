@@ -204,6 +204,45 @@ class Solargraph::TestDragonruby < Minitest::Test
     assert_includes complete("BLENDFACTOR_ONE_MINUS_SRC_A"), "BLENDFACTOR_ONE_MINUS_SRC_ALPHA"
   end
 
+  def test_undocumented_numeric_helpers
+    assert_includes complete("10.randomi"), "randomize"
+    assert_includes complete("0.from_ri"), "from_right"
+    assert_includes complete("30.sin_"), "sin_d"
+    assert_includes complete("Kernel.tick_count.eas"), "ease_spline"
+  end
+
+  def test_undocumented_grid_layout_and_geometry
+    assert_includes complete("Grid.w_ha"), "w_half"
+    assert_includes complete("Grid.center_"), "center_x"
+    assert_includes complete("Layout.rect_gr"), "rect_group"
+    assert_includes complete("Geometry.line_sl"), "line_slope"
+    rect = self.class.api_map.get_method_stack("GTK::Layout", "rect", scope: :class)
+    assert_equal 1, rect.length
+    assert rect.first.parameters.find { |param| param.name == "row" }.keyword?
+  end
+
+  def test_undocumented_inputs
+    assert_includes complete("args.inputs.directional_ve"), "directional_vector"
+    assert_includes complete("args.inputs.finger_one.touch_ord"), "touch_order"
+    assert_includes complete("args.inputs.key_down.left_ri"), "left_right"
+    assert_includes complete("args.inputs.mouse.positi"), "position"
+    assert_includes complete("args.inputs.keyboard.key_down.an"), "any?"
+  end
+
+  def test_strings_and_logging
+    assert_includes complete('"text".wrapped_l'), "wrapped_lines"
+    assert_includes complete("String.line_anch"), "line_anchors"
+    assert_includes complete("log_inf"), "log_info"
+  end
+
+  def test_undocumented_runtime_and_outputs
+    assert_includes complete("DR.paus"), "pause!"
+    assert_includes complete("DR.serialize_st"), "serialize_state"
+    assert_includes complete("File.appe"), "append"
+    assert_includes complete("args.outputs.render_target_state.queu"), "queued?"
+    assert_includes complete("args.outputs.debug.watch_f"), "watch_fps"
+  end
+
   def test_audio_volume_and_zlib
     assert_includes complete("args.audio.volu"), "volume"
     assert_includes complete("Zlib.compr"), "compress"

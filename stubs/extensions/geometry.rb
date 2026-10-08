@@ -113,6 +113,107 @@ module GTK
       # @param range [Float] degrees on either side of `target_angle`
       # @return [Boolean] true if `test_angle` is within `range` of `target_angle`
       def angle_within_range? test_angle, target_angle, range; end
+
+      # @param rect [Object] a rect
+      # @param other_rect [Object] a rect
+      # @return [Hash] `rect` centered horizontally inside `other_rect` (and moved to its `y`)
+      def center_inside_rect_x rect, other_rect; end
+
+      # @param rect [Object] a rect
+      # @param other_rect [Object] a rect
+      # @return [Hash] `rect` centered vertically inside `other_rect` (and moved to its `x`)
+      def center_inside_rect_y rect, other_rect; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @return [Float] length of `line`
+      def line_length line; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @param replace_infinity [Numeric] returned (with sign) for vertical lines
+      # @return [Numeric] slope of `line`; raises for a zero-length line
+      def line_slope line, replace_infinity: Float::INFINITY; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @param replace_infinity [Numeric, nil] slope to use for vertical lines
+      # @return [Numeric] y where `line` (extended) crosses `x = 0`
+      def line_y_intercept line, replace_infinity: nil; end
+
+      # @param line_one [Object] `x`, `y`, `x2`, `y2`
+      # @param line_two [Object] `x`, `y`, `x2`, `y2`
+      # @param replace_infinity [Numeric, nil] slope to use for vertical lines
+      # @return [Float] angle in degrees between the lines
+      def angle_between_lines line_one, line_two, replace_infinity: nil; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @return [Boolean] true if `line` is horizontal
+      def line_horizontal? line; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @return [Boolean] true if `line` is vertical
+      def line_vertical? line; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @param x [Numeric]
+      # @param y [Numeric]
+      # @return [Hash, Array] a copy of `line` moved by `x`, `y`
+      def shift_line line, x, y; end
+
+      # @param line [Object] `x`, `y`, `x2`, `y2`
+      # @param min_w [Numeric]
+      # @param min_h [Numeric]
+      # @return [Hash] bounding rect of `line`, at least `min_w` by `min_h`
+      def line_rect line, min_w: 0, min_h: 0; end
+
+      # Same as #line_rect.
+      #
+      # @param line [Object]
+      # @param min_w [Numeric]
+      # @param min_h [Numeric]
+      # @return [Hash]
+      def line_to_rect line, min_w: 0, min_h: 0; end
+
+      # @param rect [Object] `x`, `y`, `w`, `h`
+      # @return [Hash] `x`, `y`, `x2`, `y2` diagonal of `rect`
+      def rect_to_line rect; end
+
+      # @param shape [Object]
+      # @return [Boolean] true if `shape` has `w` and `h`
+      def rect? shape; end
+
+      # @param shape [Object]
+      # @return [Boolean] true if `shape` has `x2` and `y2`
+      def line? shape; end
+
+      # @param shape [Object]
+      # @return [Boolean] true if `shape` has a `radius`
+      def circle? shape; end
+
+      # Like #intersect_rect?, for any shapes with a bounding box (circles,
+      # rects, lines, points).
+      #
+      # @param inner_shape [Object]
+      # @param outer_shape [Object]
+      # @param tolerance [Float]
+      # @return [Boolean, nil]
+      def intersect_bounding_box? inner_shape, outer_shape, tolerance = 0.0; end
+
+      # Like #inside_rect?, for any shapes with a bounding box.
+      #
+      # @param inner_shape [Object]
+      # @param outer_shape [Object]
+      # @param tolerance [Float]
+      # @return [Boolean, nil]
+      def inside_bounding_box? inner_shape, outer_shape, tolerance = 0.0; end
+
+      # Value at `t` of a cubic bezier with control values `a`, `b`, `c`, `d`.
+      #
+      # @param t [Float] `0.0` to `1.0`
+      # @param a [Numeric]
+      # @param b [Numeric]
+      # @param c [Numeric]
+      # @param d [Numeric]
+      # @return [Float]
+      def cubic_bezier t, a, b, c, d; end
     end
   end
 end
@@ -165,6 +266,12 @@ module Typing
 
     # @return [Hash] `x`, `y` center point of self
     def rect_center_point; end
+
+    # @return [Hash] bounding rect of self as a line
+    def line_to_rect min_w: 0, min_h: 0; end
+
+    # @return [Hash] `x`, `y`, `x2`, `y2` diagonal of self as a rect
+    def rect_to_line; end
   end
 end
 

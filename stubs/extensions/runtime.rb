@@ -45,6 +45,144 @@ module GTK
     # @return [void]
     def raise_window; end
 
+    # Pauses the game: `tick` stops being called until #unpause!.
+    #
+    # @return [void]
+    def pause!; end
+
+    # @return [void]
+    def unpause!; end
+
+    # @return [Boolean]
+    def paused?; end
+
+    # Converts `state` to a string that #deserialize_state can read back,
+    # and writes it to `file` if given.
+    #
+    # @example
+    #   DR.serialize_state("game_state.txt", args.state)
+    #
+    # @overload serialize_state(file, state)
+    #   @param file [String]
+    #   @param state [GTK::OpenEntity, Hash]
+    # @overload serialize_state(state)
+    #   @param state [GTK::OpenEntity, Hash]
+    # @return [String] the serialized state
+    def serialize_state *opts; end
+
+    # Reads state written by #serialize_state, from a file or a string.
+    #
+    # @example
+    #   args.state = DR.deserialize_state("game_state.txt")
+    #
+    # @param file_or_serialization [String] a file path, or serialized state
+    # @return [GTK::OpenEntity, Hash, Array, nil]
+    def deserialize_state file_or_serialization; end
+
+    # Seeds the random number generator (`rand`, `Numeric.rand`, ...).
+    #
+    # @param value [Integer]
+    # @return [void]
+    def set_rng value; end
+
+    # @return [Integer] the current random number seed
+    def seed; end
+
+    # Same as #notify!.
+    #
+    # @param message [String]
+    # @param duration [Integer] ticks to show the notification
+    # @return [void]
+    def notify message, duration = 300; end
+
+    # Clears the current notification.
+    #
+    # @return [void]
+    def notify_subdued!; end
+
+    # Shows `message` as a toast in the console.
+    #
+    # @param id [Symbol]
+    # @param message [String]
+    # @return [void]
+    def toast id, message; end
+
+    # Same as #enable_console.
+    # @return [void]
+    def enable_console!; end
+
+    # Same as #disable_console.
+    # @return [void]
+    def disable_console!; end
+
+    # @return [Array<Hash>] same as #framerate_diagnostics_primitives
+    def current_framerate_primitives; end
+
+    # Stops the warning shown when the framerate drops.
+    # @return [void]
+    def disable_framerate_warning!; end
+
+    # @return [void]
+    def enable_framerate_warning!; end
+
+    # @return [Symbol] `:on` or `:off`
+    attr_accessor :log_level
+
+    # Makes `nil` raise on unknown methods instead of returning `nil`
+    # (DragonRuby's nil punning). Call outside of `tick`.
+    #
+    # @return [void]
+    def disable_nil_punning!; end
+
+    # Deletes `path` (relative to the game directory) if it exists.
+    #
+    # @param path [String]
+    # @return [void]
+    def delete_file_if_exist path; end
+
+    # @param uri [String]
+    # @param headers [Array<String>, nil]
+    # @return [Object] an http response that will eventually have a value (see #http_get)
+    def http_head uri, headers = nil; end
+
+    # Uploads the file at `fname`.
+    #
+    # @param uri [String]
+    # @param fname [String]
+    # @param headers [Array<String>, nil]
+    # @return [Object] an http response that will eventually have a value (see #http_get)
+    def http_put uri, fname, headers = nil; end
+
+    # Opens the user's mail client.
+    #
+    # @param email [String]
+    # @param subject [String]
+    # @param body [String, nil]
+    # @return [void]
+    def mailto email:, subject:, body: nil, exception: nil; end
+
+    # Opens the DragonRuby docs in the browser.
+    # @return [void]
+    def open_docs; end
+
+    # Turns on accessibility emulation.
+    # @return [void]
+    def a11y_enable!; end
+
+    # @return [void]
+    def a11y_disable!; end
+
+    # @return [Boolean]
+    def a11y_enabled?; end
+
+    # Prefer #platform? for checks.
+    #
+    # @return [String] e.g. `"Linux"`, `"Windows"`, `"Mac OS X"`, `"Emscripten"`, `"iOS"`, `"Android"`
+    attr_reader :platform
+
+    # @return [Integer] Unix time the game started (also the default random seed)
+    attr_reader :started_at
+
     # Schedules a block to run at the beginning of the given frame.
     #
     # @example
@@ -242,5 +380,18 @@ module GTK
       # @return [void]
       def reject; end
     end
+  end
+end
+
+# DragonRuby routes these through the runtime's file functions (paths are
+# relative to the game directory).
+class File
+  class << self
+    # Same as `DR.append_file`.
+    #
+    # @param path [String]
+    # @param contents [String]
+    # @return [void]
+    def append path, contents; end
   end
 end

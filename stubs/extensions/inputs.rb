@@ -36,6 +36,39 @@ module GTK
 
     # @return [Array<Symbol>] all keys in this state (relatively expensive; avoid calling every frame)
     def truthy_keys; end
+
+    # True if any of `keys` is in this state. A key ending in `!`
+    # (e.g. `:enter!`) is cleared when this returns true, so later checks
+    # on the same frame don't see it.
+    #
+    # @param keys [Array<Symbol>]
+    # @return [Boolean]
+    def any? keys; end
+
+    # True if all of `keys` are in this state. Keys ending in `!` are
+    # cleared when this returns true (see #any?).
+    #
+    # @param keys [Array<Symbol>]
+    # @return [Boolean]
+    def all? keys; end
+
+    # @return [Hash, nil] normalized `x`, `y` from WASD and arrow keys; `nil` if none are in this state
+    def directional_vector; end
+
+    # @return [Hash, nil] normalized `x`, `y` from WASD keys only
+    def directional_vector_wasd; end
+
+    # @return [Hash, nil] normalized `x`, `y` from arrow keys only
+    def directional_vector_arrow; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector
+    def directional_angle; end
+
+    # @return [Integer] `-1` (left), `0`, or `+1` (right)
+    def left_right; end
+
+    # @return [Integer] `-1` (down), `0`, or `+1` (up)
+    def up_down; end
   end
 
   class Keyboard
@@ -132,6 +165,18 @@ module GTK
 
     # @return [Array<Symbol>] all buttons in this state
     def truthy_keys; end
+
+    # @return [Hash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
+    def directional_vector; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector
+    def directional_angle; end
+
+    # @return [Integer] `-1` (left), `0`, or `+1` (right)
+    def left_right; end
+
+    # @return [Integer] `-1` (down), `0`, or `+1` (up)
+    def up_down; end
   end
 
   class Controller
@@ -192,6 +237,12 @@ module GTK
 
     # @return [Hash] normalized `x`, `y` using the face buttons as directions (twin-stick style)
     def directional_vector_buttons; end
+
+    # @return [Hash, nil] normalized `x`, `y` from the dpad and left analog stick; `nil` at rest
+    def directional_vector; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector; `nil` at rest
+    def directional_angle; end
 
     # @return [Float] angle of the left analog stick in degrees
     def left_analog_angle; end
@@ -255,6 +306,24 @@ module GTK
     # @return [Integer, nil] `Kernel.global_tick_count` the hold started
     attr_reader :global_held_at
 
+    # @return [Object, nil] same as #click
+    attr_reader :down
+
+    # @return [Integer, nil] same as #click_at
+    attr_reader :down_at
+
+    # @return [Integer, nil] same as #global_click_at
+    attr_reader :global_down_at
+
+    # @return [GTK::MousePoint, nil] the previous click of this button
+    attr_reader :previous_click
+
+    # @return [Numeric] mouse position
+    attr_reader :x, :y
+
+    # @return [Integer] ticks the button has been held (`0` if it isn't)
+    def held_duration; end
+
     # The click, if the button was exclusively determined to be a click
     # (released quickly without moving far) and won't be considered held.
     #
@@ -316,6 +385,101 @@ module GTK
     # @param offset [Hash, nil]
     # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
     def point offset: nil; end
+
+    # Same as #point.
+    #
+    # @param offset [Hash, nil]
+    # @return [Hash] `{ x:, y:, w: 0, h: 0 }`
+    def position offset: nil; end
+
+    # @param rect [Hash, Object] responds to `x`, `y`, `w`, `h`
+    # @param offset [Hash, nil] added to the mouse position first
+    # @return [Boolean] true if the mouse is inside `rect`
+    def inside_rect? rect, offset: nil; end
+
+    # @param other_rect [Hash, Object] responds to `x`, `y`, `w`, `h`
+    # @param offset [Hash, nil] ignored by the runtime
+    # @return [Boolean] true if the mouse intersects `other_rect`
+    def intersect_rect? other_rect, offset: nil; end
+
+    # @return [Hash] #point offset by `Grid.allscreen_offset`
+    def point_allscreen_offset; end
+
+    # @return [Hash] #rect offset by `Grid.allscreen_offset`
+    def rect_allscreen_offset; end
+
+    # @return [Integer] always `0`
+    def w; end
+
+    # @return [Integer] always `0`
+    def h; end
+
+    # @return [GTK::MousePoint, nil] the left button's click or hold, if either
+    def left; end
+
+    # @return [GTK::MousePoint, nil] the middle button's click or hold, if either
+    def middle; end
+
+    # @return [GTK::MousePoint, nil] the right button's click or hold, if either
+    def right; end
+
+    # @return [GTK::MousePoint, nil] the x1 button's click or hold, if either
+    def x1; end
+
+    # @return [GTK::MousePoint, nil] the x2 button's click or hold, if either
+    def x2; end
+
+    # @return [Boolean] true if the x1 (back) button is down
+    attr_reader :button_x1
+
+    # @return [Boolean] true if the x2 (forward) button is down
+    attr_reader :button_x2
+
+    # @return [GTK::MousePoint, nil] the left button's hold
+    def held; end
+
+    # @return [Integer, nil] `Kernel.tick_count` the left button was clicked
+    def click_at; end
+
+    # @return [Integer, nil] `Kernel.global_tick_count` the left button was clicked
+    def global_click_at; end
+
+    # @return [Integer, nil] `Kernel.tick_count` the left button's hold started
+    def held_at; end
+
+    # @return [Integer, nil] `Kernel.global_tick_count` the left button's hold started
+    def global_held_at; end
+
+    # @return [Integer, nil] `Kernel.tick_count` the left button was released
+    def up_at; end
+
+    # @return [Integer, nil] `Kernel.global_tick_count` the left button was released
+    def global_up_at; end
+
+    # @return [Integer, nil] `Kernel.tick_count` the mouse last moved
+    attr_reader :moved_at
+
+    # @return [Integer, nil] `Kernel.global_tick_count` the mouse last moved
+    attr_reader :global_moved_at
+
+    # @return [Integer, nil] `Kernel.tick_count` if the mouse was used on this frame
+    attr_reader :active
+
+    # @param key [Symbol] `:left`, `:middle`, `:right`, `:x1`, or `:x2`
+    # @return [GTK::MousePoint, nil]
+    def key_down? key; end
+
+    # @param key [Symbol]
+    # @return [GTK::MousePoint, nil]
+    def key_up? key; end
+
+    # @param key [Symbol]
+    # @return [GTK::MousePoint, nil]
+    def key_held? key; end
+
+    # @param key [Symbol]
+    # @return [GTK::MousePoint, nil]
+    def key_down_or_held? key; end
   end
 
   # Mouse button states for one event type, via
@@ -373,6 +537,18 @@ module GTK
   class KeyboardOrControllerKeys
     # @return [Integer, Boolean, nil] truthy if the direction entered this state
     attr_reader :up, :down, :left, :right
+
+    # @return [Hash, nil] normalized `x`, `y` from the directions in this state; `nil` if none
+    def directional_vector; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector
+    def directional_angle; end
+
+    # @return [Integer] `-1` (left), `0`, or `+1` (right)
+    def left_right; end
+
+    # @return [Integer] `-1` (down), `0`, or `+1` (up)
+    def up_down; end
   end
 
   class MousePoint
@@ -444,5 +620,26 @@ module GTK
 
     # @return [Integer] `-1` (down), `0`, or `+1` (up) from the arrow keys and dpad only (no WASD or analog)
     def up_down_arrow; end
+
+    # @return [Hash, nil] normalized `x`, `y` from the keyboard, falling back to `controller_one`; `nil` at rest
+    def directional_vector; end
+
+    # @return [Float, nil] angle in degrees of #directional_vector; `nil` at rest
+    def directional_angle; end
+
+    # @return [GTK::FingerTouch, nil] the first finger touching the screen
+    attr_reader :finger_one
+
+    # @return [GTK::FingerTouch, nil] the second finger touching the screen
+    attr_reader :finger_two
+
+    # Change in distance between two fingers on this frame (positive when
+    # pinching in). The mouse wheel also sets it. `0` when not pinching.
+    #
+    # @return [Numeric]
+    attr_reader :pinch_zoom
+
+    # @return [Boolean] true if the device supports touch
+    def touch_enabled?; end
   end
 end

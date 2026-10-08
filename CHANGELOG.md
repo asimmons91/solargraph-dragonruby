@@ -14,6 +14,18 @@
   - `Easing.spline`, `Numeric.compose_blendmode` and the `BLENDFACTOR_*`/`BLENDOPERATION_*` constants,
     `Numeric#mid?`/`between?`/`min`/`max` and `Numeric.mid`, `args.audio.volume`, and `Zlib`
 - Fixes the signatures of `Easing.smooth_start`/`smooth_stop`/`smooth_step` (keyword arguments) and `Numeric#mid`.
+- Adds undocumented APIs that the runtime and sample apps use:
+  - Numeric: `randomize`, `rand_sign`, `half`, `to_vector`, `towards`, `from_right`/`from_left`/`from_bottom`,
+    `sin`/`cos`/`tan` (and `_d`/`_r`), `ease`/`ease_spline`, `to_sf(decimal_places:, include_sign:)`, ...
+  - `Grid.x`/`y`/`center`/`w_half`/`h_half`, `origin_center?`, `letterbox?`, `hd?` and more pixel-category properties
+  - `Layout.rect_group`, `rects`, `point`, `rect_center`, `font_size_*`, `safe_rect`, ...
+  - `Geometry.line_slope`, `line_length`, `line_rect`, `rect_to_line`, `cubic_bezier`, `circle?`, ...
+  - Inputs: `directional_vector`/`directional_angle` (on inputs, keyboard key states and controllers), more mouse
+    properties (`position`, `held`, `left`, `click_at`, `key_down?`, ...), `finger_one`/`finger_two`, `pinch_zoom`
+  - `String#wrapped_lines`, `String.line_anchors`, `trim`, ..., and the global `log_info`/`log_warn`/`log_once`/... functions
+  - `DR.pause!`, `serialize_state`/`deserialize_state`, `set_rng`, `notify`, `http_head`/`http_put`, `platform`, ...,
+    `outputs.render_target_state`, `outputs.a11y`, `watch_fps`, and `File.append`
+- Fixes the `Layout.rect` signature (keyword arguments).
 
 ## [0.1.0] - 2026-10-07
 

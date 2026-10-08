@@ -167,6 +167,76 @@ module GTK
 
     # @return [Integer] refresh rate of the current display
     def refresh_rate; end
+
+    # @return [Numeric] same as #left
+    def x; end
+
+    # @return [Numeric] same as #bottom
+    def y; end
+
+    # @return [Numeric] x of the center of the screen
+    def center_x; end
+
+    # @return [Numeric] y of the center of the screen
+    def center_y; end
+
+    # @return [Hash] center of the screen as `{ x:, y:, w: 0, h: 0 }`
+    def center; end
+
+    # @return [Numeric] half of #w
+    def w_half; end
+
+    # @return [Numeric] half of #h
+    def h_half; end
+
+    # @return [Boolean] true if the origin is the center of the screen (see #origin_center!)
+    def origin_center?; end
+
+    # @return [Boolean] true if the origin is the bottom left of the screen (the default)
+    def origin_bottom_left?; end
+
+    # @return [Boolean] true if the game is letterboxed
+    def letterbox?; end
+
+    # @return [Boolean] true if `hd=true` is set in `game_metadata.txt` (Pro license)
+    def hd?; end
+
+    # @return [Boolean] true if `highdpi=true` is set in `game_metadata.txt`
+    def highdpi?; end
+
+    # @return [Float] high DPI scale of the display the window is on
+    def high_dpi_scale; end
+
+    # @return [Array<Symbol>] orientations from `game_metadata.txt` (`:landscape`, `:portrait`)
+    def supported_orientations; end
+
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def x_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def y_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Hash] `{ x:, y:, w:, h: }`
+    def rect_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def allscreen_x_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def allscreen_y_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def allscreen_w_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Numeric]
+    def allscreen_h_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Hash] `{ x:, y:, w:, h: }`
+    def allscreen_rect_px; end
+    # Pro license: real pixel values need `hd=true` (otherwise same as the logical value).
+    # @return [Hash] `{ x:, y: }`
+    def allscreen_offset_px; end
   end
 end
 

@@ -97,6 +97,8 @@ indexed twice.
   - `Numeric#frame_index`, `elapsed_time`, `to_sf`, `mid?`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
   - `Easing.spline` and keyword `smooth_start`/`smooth_stop`/`smooth_step`, `Numeric.compose_blendmode` with the
     `BLENDFACTOR_*`/`BLENDOPERATION_*` constants, `args.audio.volume`, and `Zlib`
+  - Undocumented APIs used by the sample apps: `10.randomize(:ratio, :sign)`, `Grid.center`, `Layout.rect_group`,
+    `Geometry.line_slope`, `String#wrapped_lines`, `log_info`, `DR.serialize_state`, `outputs.render_target_state`, ...
   - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `Kernel.global_tick_count`
   - The `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect`, `attr_label` and `attr_line` class macros: calling one in a
     class (or in one of its instance methods) completes the methods it adds

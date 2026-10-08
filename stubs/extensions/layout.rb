@@ -25,6 +25,137 @@ module GTK
       # @param h [Integer]
       # @return [Hash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
       def allscreen_rect row: 0, col: 0, w: 1, h: 1, **opts; end
+
+      # The rect of a cell span on the virtual grid (12 rows by 24 columns, or
+      # 24 by 12 in portrait), within the safe area.
+      #
+      # @example
+      #   Layout.rect(row: 1, col: 10, w: 4, h: 2)
+      #   Layout.rect(row: 0, col: [3, -3])   # columns 3 through the third from the right
+      #
+      # @param row [Numeric, Array(Integer, Integer)] row, or a `[from, to]` range (`to <= 0` counts from the end)
+      # @param col [Numeric, Array(Integer, Integer)] column, or a `[from, to]` range
+      # @param w [Numeric] width in cells
+      # @param h [Numeric] height in cells
+      # @param row_from_bottom [Numeric, nil] row counted from the bottom, instead of `row`
+      # @param col_from_right [Numeric, nil] column counted from the right, instead of `col`
+      # @param max_width [Numeric, nil]
+      # @param max_height [Numeric, nil]
+      # @param dx [Numeric] added to `x`
+      # @param dy [Numeric] added to `y`
+      # @param include_row_gutter [Boolean]
+      # @param include_col_gutter [Boolean]
+      # @param include_gutter [Boolean] both gutters
+      # @param merge [Hash, nil] merged into the result
+      # @param origin [Symbol]
+      # @param safe_area [Boolean]
+      # @param allscreen [Boolean] align to `Grid.allscreen_rect` (Pro license, All Screen mode)
+      # @return [Hash] `x`, `y`, `w`, `h`, and `center` (a Hash with `x`, `y`)
+      def rect row: 0, col: 0, w: 1, h: 1, row_from_bottom: nil, col_from_right: nil, max_width: nil, max_height: nil, dx: 0, dy: 0, include_row_gutter: false, include_col_gutter: false, include_gutter: false, merge: nil, origin: :top_left, safe_area: true, allscreen: false; end
+
+      # Lays out `items` one after another, wrapping at the edge of the grid.
+      # Each result is the item's rect merged with `item:` and `layout:`.
+      # An item may carry its own `rect_args` (`w`, `h`, gutters).
+      #
+      # @param items [Array]
+      # @param direction [Symbol] `:row` (left to right) or `:col` (top to bottom)
+      # @param row [Numeric] starting row
+      # @param col [Numeric] starting column
+      # @param w [Numeric] width of each item in cells
+      # @param h [Numeric] height of each item in cells
+      # @param include_row_gutter [Boolean]
+      # @param include_col_gutter [Boolean]
+      # @return [Array<Hash>]
+      def rects items, direction: :row, row: 0, col: 0, w: 1, h: 1, include_row_gutter: false, include_col_gutter: false; end
+
+      # Lays out each Hash in `group:` starting at `row:`/`col:` (or
+      # `row_from_bottom:`/`col_from_right:`), stepping by `drow:`/`dcol:`.
+      # Each result is the rect merged with the item (labels honor
+      # `alignment_enum`).
+      #
+      # @example
+      #   Layout.rect_group(row: 0, col: 0, drow: 0.5, group: [{ text: "a" }, { text: "b" }])
+      #
+      # @param opts [Hash] `group:`, `row:`, `col:`, `row_from_bottom:`, `col_from_right:`, `drow:`, `dcol:`,
+      #   `w:`, `h:`, `merge:`, `row_offset:`, `col_offset:`
+      # @return [Array<Hash>]
+      def rect_group opts; end
+
+      # A point inside a cell. `row_anchor:`/`col_anchor:` (`0.0` to `1.0`)
+      # pick where in the cell; the default is the cell's top left.
+      #
+      # @example
+      #   Layout.point(row: 7, col: 5.5, row_anchor: 0.5, col_anchor: 0.5)
+      #
+      # @param opts [Hash] `row:`, `col:`, `row_anchor:`, `col_anchor:`, and other #rect options
+      # @return [Hash]
+      def point opts = {}; end
+
+      # @param reference [Hash] rect to take the size from
+      # @param target [Hash] rect to center on
+      # @return [Hash] a rect the size of `reference` centered on `target`
+      def rect_center reference, target; end
+
+      # @param n [Numeric]
+      # @return [Numeric] width of `n` columns
+      def w n; end
+
+      # @param n [Numeric]
+      # @return [Numeric] height of `n` rows
+      def h n; end
+
+      # @return [Numeric] space between cells
+      def gutter; end
+
+      # @return [Numeric] size of a cell (cells are square)
+      def cell_size; end
+
+      # @return [Numeric] same as #cell_size
+      def cell_width; end
+
+      # @return [Numeric] same as #cell_size
+      def cell_height; end
+
+      # @return [Hash] `x`, `y`, `w`, `h` of the area inside the outer gutters
+      def control_rect; end
+
+      # @return [Hash] `x`, `y`, `w`, `h` of the safe area
+      def safe_rect; end
+
+      # @return [Hash] `x`, `y`, `w`, `h` of the logical canvas
+      def logical_rect; end
+
+      # @return [Symbol] `:landscape` or `:portrait`
+      def orientation; end
+
+      # @return [Numeric] font size in points that fills a cell's height
+      def font_size_cell; end
+
+      # @return [Numeric] same as #font_size_cell
+      def font_size_xl; end
+
+      # @return [Numeric] 80% of #font_size_cell
+      def font_size_lg; end
+
+      # @return [Numeric] 70% of #font_size_cell
+      def font_size_med; end
+
+      # @return [Numeric] same as #font_size_med
+      def font_size; end
+
+      # @return [Numeric] 60% of #font_size_cell
+      def font_size_sm; end
+
+      # @return [Numeric] 50% of #font_size_cell
+      def font_size_xs; end
+
+      # @param px [Numeric]
+      # @return [Integer] `px` in points
+      def font_px_to_pt px; end
+
+      # @param pt [Numeric]
+      # @return [Numeric] `pt` in pixels
+      def font_pt_to_px pt; end
     end
   end
 end
