@@ -159,6 +159,24 @@ bundle exec rake stubs:sync[<ref>] # ...or from a specific branch/tag
 - The Solargraph dependency is pinned to `~> 0.61.0`, because its plugin internals
   change between minor releases. Re-run the tests before widening it.
 
+### Releasing
+
+Add changes to the `## [Unreleased]` section of `CHANGELOG.md` as you go. To release:
+
+```sh
+bundle exec rake release:prepare[minor]   # or major, patch, or an explicit version like 1.2.3
+git push origin main v0.2.0               # the command it prints
+```
+
+`release:prepare` runs the tests, bumps `version.rb` and `Gemfile.lock`, moves the Unreleased notes under a
+dated heading, and commits and tags the release. Pushing the tag runs `.github/workflows/release.yml`, which checks
+that the tag, version and changelog agree, publishes the gem to RubyGems.org with
+[Trusted Publishing](https://guides.rubygems.org/trusted-publishing/), and creates the GitHub release from that
+version's changelog notes.
+
+One-time setup: on RubyGems.org, add a trusted publisher for this repository with the workflow `release.yml` and
+the environment `release` (use a "pending" trusted publisher if the gem has never been pushed).
+
 ## Credits and license
 
 The gem is available under the [MIT License](LICENSE.txt). The vendored stubs in
