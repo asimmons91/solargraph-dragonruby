@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-08
+
 - Adds `module Main` support: the `boot`/`start`/`tick`/`reset`/`did_reset`/`shutdown` hooks type `args` as
   `GTK::Args` when they take it, and `args`, `inputs`, `outputs`, `state` (a `Hash`), `events` and `audio`
   complete as bare calls inside `Main`.
@@ -49,3 +51,6 @@
 - Types `buffered_click`/`buffered_held` as `MousePoint` (DragonRuby 7.22), adds them on `Mouse` along with
   `MousePoint#x`/`#y`, and types `args.inputs.text` as `Array<String>`.
 - Requires Solargraph 0.61.x.
+
+[Unreleased]: https://github.com/asimmons91/solargraph-dragonruby/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/asimmons91/solargraph-dragonruby/compare/v0.1.0...v0.2.0
