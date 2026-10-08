@@ -1,6 +1,6 @@
-# Class macros from dragon/attr_dr.rb, attr_sprite.rb and attr_label.rb.
-# Each one includes a module into the class it's called in. The plugin's
-# Convention#local adds those includes for calls in your game's code, so the
+# Class macros from dragon/attr_dr.rb, attr_sprite.rb, attr_label.rb and
+# attr_line.rb. Each one includes a module into the class it's called in. The
+# plugin's MacroNode adds those includes for calls in your game's code, so the
 # module methods complete on `self` and on instances.
 
 class ::Module
@@ -33,6 +33,12 @@ class ::Module
   #
   # @return [void]
   def attr_label; end
+
+  # Class macro that includes AttrLine, so instances can be pushed into
+  # `args.outputs.lines` (or `args.outputs.primitives`) directly.
+  #
+  # @return [void]
+  def attr_line; end
 end
 
 # Added to a class by `attr_dr` (or `attr_gtk`). Every method reads from
@@ -216,4 +222,28 @@ module AttrLabel
 
   # @return [String] font file path
   attr_accessor :font
+end
+
+# Added to a class by `attr_line`. Instances render as lines.
+module AttrLine
+  # @return [Numeric]
+  attr_accessor :x, :y, :x2, :y2, :w, :h
+
+  # @return [Integer] 0-255
+  attr_accessor :r, :g, :b, :a
+
+  # @return [Integer]
+  attr_accessor :blendmode_enum
+
+  # @return [Numeric] same as `x`
+  attr_accessor :x1
+
+  # @return [Numeric] same as `y`
+  attr_accessor :y1
+
+  # @return [Symbol] always `:line`
+  def primitive_marker; end
+
+  # @return [self]
+  def line; end
 end

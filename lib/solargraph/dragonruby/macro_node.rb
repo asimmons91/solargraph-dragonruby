@@ -15,7 +15,8 @@ module Solargraph
         attr_gtk: "AttrDR",
         attr_sprite: "AttrSprite",
         attr_rect: "AttrRect",
-        attr_label: "AttrLabel"
+        attr_label: "AttrLabel",
+        attr_line: "AttrLine"
       }.freeze
 
       # Runs after Solargraph's own SendNode, which has already processed the

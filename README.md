@@ -93,8 +93,8 @@ indexed twice.
   - `vec2_*` and other `Geometry` functions, and the Geometry mixin on `Hash`/`Array` (`rect.intersect_rect?(other)`)
   - `Numeric#frame_index`, `elapsed_time`, `to_sf`, ..., plus `Array#map_2d`, `include_any?`, and `Layout.row_count`, ...
   - `outputs.watch`/`outputs.debug.watch`, `outputs.sounds`, `did_reset`/`shutdown`, `Kernel.global_tick_count`
-  - The `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect` and `attr_label` class macros: calling one in a class (or in one
-    of its instance methods) completes the methods it adds
+  - The `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect`, `attr_label` and `attr_line` class macros: calling one in a
+    class (or in one of its instance methods) completes the methods it adds
 - **Indie and Pro APIs** are included. Their hover docs say which license tier they need:
   - Shaders: `outputs.shader = { path:, uniforms:, textures: }` (Indie/Pro)
   - C Extensions: `DR.dlopen`, `DR.get_dlopen_path` (Indie/Pro)

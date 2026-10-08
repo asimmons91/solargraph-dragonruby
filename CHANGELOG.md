@@ -3,9 +3,9 @@
 - Adds `module Main` support: the `boot`/`start`/`tick`/`reset`/`did_reset`/`shutdown` hooks type `args` as
   `GTK::Args` when they take it, and `args`, `inputs`, `outputs`, `state` (a `Hash`), `events` and `audio`
   complete as bare calls inside `Main`.
-- Adds the `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect` and `attr_label` class macros: a call in a class body (or
-  instance method) is treated as including `AttrDR`, `AttrSprite`, `AttrRect` or `AttrLabel`, so their methods complete
-  on `self` and on instances.
+- Adds the `attr_dr`/`attr_gtk`, `attr_sprite`, `attr_rect`, `attr_label` and `attr_line` class macros: a call in a
+  class body (or instance method) is treated as including `AttrDR`, `AttrSprite`, `AttrRect`, `AttrLabel` or `AttrLine`,
+  so their methods complete on `self` and on instances.
 
 ## [0.1.0] - 2026-10-07
 

@@ -232,6 +232,11 @@ class Solargraph::TestDragonruby < Minitest::Test
     assert_includes complete_in_class("self.bott", body: "attr_rect"), "bottom"
   end
 
+  def test_attr_line
+    assert_includes complete_in_class("self.x", body: "attr_line"), "x2"
+    assert_includes complete_in_class("self.primitive_", body: "attr_line"), "primitive_marker"
+  end
+
   def test_macro_called_in_an_instance_method
     source = Solargraph::Source.load_string("class Game\n  def initialize\n    attr_dr\n  end\n  def tick\n    outp\n  end\nend\n", "game.rb")
     api = self.class.api_map
