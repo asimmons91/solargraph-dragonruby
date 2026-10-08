@@ -1,0 +1,8 @@
+solargraph-dragonruby
+Copyright (c) 2026 Austin Simmons. MIT License, see LICENSE.txt.
+
+This project includes third-party files:
+
+stubs/upstream/
+  Vendored from https://github.com/owenbutler/dragonruby-yard-doc
+  Copyright (c) 2024 Owen Butler. MIT License, see stubs/upstream/LICENSE.txt.

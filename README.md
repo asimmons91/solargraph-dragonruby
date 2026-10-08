@@ -151,5 +151,6 @@ bundle exec rake stubs:sync[<ref>] # ...or from a specific branch/tag
 ## Credits and license
 
 The gem is available under the [MIT License](LICENSE.txt). The vendored stubs in
-`stubs/upstream` are by Owen Butler and contributors, also MIT licensed (see
+`stubs/upstream` come from [owenbutler/dragonruby-yard-doc](https://github.com/owenbutler/dragonruby-yard-doc)
+and are by Owen Butler and contributors, also MIT licensed (see
 [stubs/upstream/LICENSE.txt](stubs/upstream/LICENSE.txt)).
